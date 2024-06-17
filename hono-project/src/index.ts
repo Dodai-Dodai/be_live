@@ -7,7 +7,7 @@ const app = new Hono();
 
 const homepageHTML = `
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,17 +26,16 @@ const homepageHTML = `
 </head>
 <body>
   <header>
-    <h1>Honoを使ったwebページへようこそ</h1>
+    <h1>Welcome to My Website</h1>
   </header>
   <nav>
-    <a href="/">ホーム</a>
-    <a href="/about">ここはなに？</a>
-    <a href="/contact">問い合わせ</a>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
   </nav>
   <section id="content">
     <h2>Home</h2>
-    <p>ここはホームページです。</p>
-    <p>YamadaUIわからないよおお</p>
+    <p>This is the homepage. Welcome to my website!</p>
   </section>
 </body>
 </html>
@@ -60,12 +59,12 @@ const aboutHTML = `
 </head>
 <body>
   <header>
-    <h1>ここはなに？</h1>
+    <h1>About Us</h1>
   </header>
   <nav>
-    <a href="/">ホーム</a>
-    <a href="/about">ここはなに？</a>
-    <a href="/contact">問い合わせ</a>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
   </nav>
   <section id="content">
     <h2>About</h2>
@@ -99,9 +98,9 @@ const contactHTML = `
     <h1>Contact Us</h1>
   </header>
   <nav>
-    <a href="/">ホーム</a>
-    <a href="/about">ここはなに？</a>
-    <a href="/contact">問い合わせ</a>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
   </nav>
   <section id="content">
     <h2>Contact</h2>
