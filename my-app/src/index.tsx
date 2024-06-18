@@ -1,12 +1,18 @@
-// src/index.js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { UIProvider } from '@yamada-ui/react';
+// src/index.tsx
+import { createRoot } from 'react-dom/client';
 import App from './App';
+import { UIProvider } from '@yamada-ui/react';
 
-ReactDOM.render(
-  <UIProvider>
-    <App />
-  </UIProvider>,
-  document.getElementById('root')
-);
+const container = document.getElementById('root');
+
+if (container) {
+  const root = createRoot(container);
+
+  root.render(
+    <UIProvider>
+      <App />
+    </UIProvider>
+  );
+} else {
+  console.error('Root container not found');
+}
