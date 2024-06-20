@@ -48,7 +48,7 @@ const Viewer = () => {
     };
 
     return (
-        <div>
+        <div  style={{ backgroundColor: 'white' }}>
             <h1>
                 Viewer
             </h1>

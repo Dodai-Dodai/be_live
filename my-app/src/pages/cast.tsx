@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef } from "react";
 import Peer from "peerjs";
 
 const Client = () => {
@@ -35,7 +35,7 @@ const Client = () => {
             });
         }).catch(err => {
             console.log(err);
-        })
+        });
 
         return () => {
             peerInstance.destroy();
@@ -44,12 +44,12 @@ const Client = () => {
     }, []);
 
     return (
-        <div>
+        <div style={{ backgroundColor: 'white' }}>
             <h1>
                 Client
             </h1>
             <div>
-                <video ref={localVideoRef} autoPlay muted></video>
+                <video ref={localVideoRef} autoPlay muted style={{ backgroundColor: 'black' }}></video>
             </div>
         </div>
     );
