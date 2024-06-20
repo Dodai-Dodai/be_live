@@ -1,5 +1,6 @@
 import React, {useState, useRef} from 'react';
 import Peer from 'peerjs';
+import { Button, Heading, FormControl, Label, HelperMessage, ErrorMessage, Input } from '@yamada-ui/react';
 
 const Viewer = () => {
     const [peerId, setPeerId] = useState('');
@@ -49,23 +50,16 @@ const Viewer = () => {
 
     return (
         <div  style={{ backgroundColor: 'white' }}>
-            <h1>
+            <Heading>
                 Viewer
-            </h1>
+            </Heading>
             <div>
-                <label htmlFor='peerIdInput'>
-                    Your Peer ID:
-                </label>
-                <input
-                    type='text'
-                    id='peerIdInput'
-                    value={peerId}
-                    onChange={e => setPeerId(e.target.value)}
-                />
-
-                <button onClick={handleConnect}>
-                    Connect
-                </button>
+                <FormControl label="peerIdInput">
+                    <Input id='peerIdInput' value={peerId} onChange={e => setPeerId(e.target.value)} />
+                    <Button onClick={handleConnect}>
+                        Connect
+                    </Button>
+                </FormControl>
             </div>
             <div>
                 <video ref={localVideoRef} autoPlay muted></video>
