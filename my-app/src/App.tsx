@@ -7,6 +7,7 @@ import './App.css'; // CSSファイルをインポート
 import Home from './pages/Home';
 import About from './pages/About';
 import Test from './pages/Test';
+import Client from './pages/cast';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
               <Route path='/' element={<Home />} />
               <Route path='/about' element={<About />} />
               <Route path='/test' element={<Test />} />
+              <Route path='/client0' element={<Client />} />
 
             </Routes>
           </Router>
