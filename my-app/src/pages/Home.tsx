@@ -20,6 +20,10 @@ const Home: React.FC = () => {
                 <Link to="/client0">
                     <Button colorScheme="blue">Go to client0 Page</Button>
                 </Link>
+
+                <Link to="/viewer">
+                    <Button colorScheme="blue">Go to viewer Page</Button>
+                </Link>
             </div>
         </div>
     );
