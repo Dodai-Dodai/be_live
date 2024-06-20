@@ -1,18 +1,30 @@
-// src/App.js
 import React from 'react';
-import { Box, Text, Button } from '@yamada-ui/react';
-import LoadingExample from './LoadingExample';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { UIProvider } from '@yamada-ui/react';
+import './App.css'; // CSSファイルをインポート
+
+// ページコンポーネントをインポート
+import Home from './pages/Home';
+import About from './pages/About';
+import Test from './pages/Test';
 
 const App = () => {
   return (
-    <Box p="4" bg="gray.100" height="100vh">
-      <Text fontSize="2xl" color="blue.500">こんにちは、Yamada UI!</Text>
-      <Button>Click me!</Button>
+    <UIProvider>
+      <div className="page-background">
+        <div className="container">
+          <Router>
+            <Routes>
 
-      <LoadingExample />
+              <Route path='/' element={<Home />} />
+              <Route path='/about' element={<About />} />
+              <Route path='/test' element={<Test />} />
 
-
-    </Box>
+            </Routes>
+          </Router>
+        </div>
+      </div>
+    </UIProvider>
   );
 }
 
