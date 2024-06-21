@@ -9,6 +9,8 @@ import About from './pages/About';
 import Test from './pages/Test';
 import Client from './pages/cast';
 import Viewer from './pages/viewer';
+import Guest from './pages/guest';
+import Conf from './pages/conf';
 
 const App = () => {
   return (
@@ -23,6 +25,8 @@ const App = () => {
               <Route path='/test' element={<Test />} />
               <Route path='/client0' element={<Client />} />
               <Route path='/viewer' element={<Viewer />} />
+              <Route path='/guest' element={<Guest />} />
+              <Route path='/conf' element={<Conf />} />
 
             </Routes>
           </Router>
