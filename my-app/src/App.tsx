@@ -7,6 +7,8 @@ import './App.css'; // CSSファイルをインポート
 import Home from './pages/Home';
 import About from './pages/About';
 import Test from './pages/Test';
+import Client from './pages/cast';
+import Viewer from './pages/viewer';
 
 const App = () => {
   return (
@@ -19,6 +21,8 @@ const App = () => {
               <Route path='/' element={<Home />} />
               <Route path='/about' element={<About />} />
               <Route path='/test' element={<Test />} />
+              <Route path='/client0' element={<Client />} />
+              <Route path='/viewer' element={<Viewer />} />
 
             </Routes>
           </Router>
