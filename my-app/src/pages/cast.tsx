@@ -15,7 +15,7 @@ const Client = () => {
 
         navigator.mediaDevices.getUserMedia({
             video: true,
-            audio: false,
+            audio: true,
         }).then(stream => {
             if (localVideoRef.current) {
                 localVideoRef.current.srcObject = stream;

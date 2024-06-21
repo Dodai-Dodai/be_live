@@ -4,7 +4,6 @@ import { Button, Heading, FormControl, Label, HelperMessage, ErrorMessage, Input
 
 const Viewer = () => {
     const [peerId, setPeerId] = useState('');
-    const localVideoRef = useRef<HTMLVideoElement | null>(null);
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
     const peerRef = useRef<Peer | null>(null);
 
@@ -23,11 +22,8 @@ const Viewer = () => {
 
         navigator.mediaDevices.getUserMedia({
             video: true,
-            audio: false
+            audio: true
         }).then(stream => {
-            if (localVideoRef.current) {
-                localVideoRef.current.srcObject = stream;
-            }
 
             // clientに接続要求送信
             const conn = peerInstance.connect('client');
@@ -36,7 +32,7 @@ const Viewer = () => {
             });
 
             peerInstance.on('call', call => {
-                call.answer(stream);
+                call.answer();
                 call.on('stream', remoteStream => {
                     if (remoteVideoRef.current) {
                         remoteVideoRef.current.srcObject = remoteStream;
@@ -62,7 +58,6 @@ const Viewer = () => {
                 </FormControl>
             </div>
             <div>
-                <video ref={localVideoRef} autoPlay muted></video>
                 <video ref={remoteVideoRef} autoPlay></video>
             </div>
         </div>
