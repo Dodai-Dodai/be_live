@@ -1,0 +1,63 @@
+.page-background {
+    background-color: #a4a4a4;
+
+}
+
+
+.card {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    overflow: visible;
+    /* クリップを解除 */
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    top: 60px;
+
+    /* 上方向へのマージンを追加 */
+
+    /* background-color: #000; */
+    z-index: 0;
+}
+
+.card-img {
+    height: 300px;
+    width: 360px;
+    border-radius: 10px;
+    background-image: url("https://images.unsplash.com/photo-1498940757830-82f7813bf178?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80");
+    background-size: cover;
+}
+
+.card-img::after {
+    content: "";
+    display: block;
+    position: relative;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+
+    /*参照先の画像を複製
+    Duplicate referenced image*/
+    background-image: url("https://images.unsplash.com/photo-1498940757830-82f7813bf178?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80");
+    background-size: cover;
+
+    /*画像をぼかして下にずらす
+    Blur and shift the image down*/
+    background-size: cover;
+    filter: blur(40px);
+    transform: translateY(20px);
+    /* 上方向に20ピクセルずらす */
+
+    /*ブレンドモードの設定
+    Blend mode settings*/
+    mix-blend-mode: difference;
+}
+
+.card-text {
+    position: relative;
+    color: rgb(255, 255, 255);
+    padding: 16px;
+    line-height: 24px;
+}

@@ -1,1 +1,0 @@
-tsubota dayo-
