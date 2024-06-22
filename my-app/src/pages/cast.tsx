@@ -7,7 +7,7 @@ const Client = () => {
 
     useEffect(() => {
         const peerInstance = new Peer('client', {
-            host: 'localhost',
+            host: '15.168.12.232',
             port: 9000,
             path: '/'
         });
@@ -41,7 +41,21 @@ const Client = () => {
             peerInstance.destroy();
         }
 
+
+
     }, []);
+
+    // 戻るボタンを押した時に切断する
+    // カメラのストリームを停止する
+    window.onpopstate = () => {
+        if (peerRef.current) {
+            peerRef.current.destroy();
+        }
+        if (localVideoRef.current) {
+            const stream = localVideoRef.current.srcObject as MediaStream;
+            stream.getTracks().forEach(track => track.stop());
+        }
+    };
 
     return (
         <div style={{ backgroundColor: 'white' }}>
