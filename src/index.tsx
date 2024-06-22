@@ -1,17 +1,18 @@
-import React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import { UIProvider } from '@yamada-ui/react';
-import { BrowserRouter } from 'react-router-dom'; // BrowserRouterをインポート
+import { BrowserRouter as Router } from 'react-router-dom'; // BrowserRouterをインポート
 
-ReactDOM.render(
-  <React.StrictMode>
-	<UIProvider>
-	  <BrowserRouter>
-		<App />
-	  </BrowserRouter>
-	</UIProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const container = document.getElementById('root');
 
+if (container) {
+  const root = createRoot(container);
+
+  root.render(
+    <UIProvider>
+      <App />
+    </UIProvider>
+  );
+} else {
+  console.error('Root container not found');
+}
