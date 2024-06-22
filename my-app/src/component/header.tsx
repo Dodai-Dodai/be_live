@@ -19,10 +19,9 @@ const Header: React.FC = () => {
                     <Text fontSize="2xl" color="white">
                         Be-live
                     </Text>
-                    {userID && <Text fontSize="2xl" color="white">Your userID is {userID}</Text>}
-                    <Link to="/login">
-                        <Button colorScheme="blue">Login</Button>
-                    </Link>
+                    <Text fontSize="2xl" color="white">
+                        Your userID is {userID}
+                    </Text>
                 </Box>
             </Box>
         );
