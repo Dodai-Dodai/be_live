@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/be_live/my-app/static/js/main.0d394c2e.js",
-    "index.html": "/be_live/my-app/index.html",
-    "main.0d394c2e.js.map": "/be_live/my-app/static/js/main.0d394c2e.js.map"
+    "main.js": "/be_live/static/js/main.709d5d04.js",
+    "index.html": "/be_live/index.html",
+    "main.709d5d04.js.map": "/be_live/static/js/main.709d5d04.js.map"
   },
   "entrypoints": [
-    "static/js/main.0d394c2e.js"
+    "static/js/main.709d5d04.js"
   ]
 }
