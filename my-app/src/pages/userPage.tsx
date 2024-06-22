@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Text, Button } from '@yamada-ui/react';
 import { Link } from 'react-router-dom';
+import Header from '../component/header';
 
 const UserPage: React.FC = () => {
     // localstrageに保存されているuserIDを取得
@@ -8,6 +9,7 @@ const UserPage: React.FC = () => {
 
     return (
         <div>
+            <Header />
             <Text fontSize="2xl" color="blue.500">Your userID is {userID}</Text>
 
             <Link to="/test">
