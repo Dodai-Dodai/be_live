@@ -1,12 +1,14 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import Peer from 'peerjs';
-import { Button, Heading, FormControl, Label, HelperMessage, ErrorMessage, Input } from '@yamada-ui/react';
+import { Button, Heading, FormControl, Input } from '@yamada-ui/react';
 
 const Viewer = () => {
     const [peerId, setPeerId] = useState('');
-    const localVideoRef = useRef<HTMLVideoElement | null>(null);
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
     const peerRef = useRef<Peer | null>(null);
+    const [conn, setConn] = useState<any>(null);
+    const [messages, setMessages] = useState<{ user: string, text: string }[]>([]);
+    const [message, setMessage] = useState<string>('');
 
     const handleConnect = () => {
         if (!peerId) {
@@ -23,20 +25,25 @@ const Viewer = () => {
 
         navigator.mediaDevices.getUserMedia({
             video: true,
-            audio: false
+            audio: true
         }).then(stream => {
-            if (localVideoRef.current) {
-                localVideoRef.current.srcObject = stream;
-            }
-
-            // clientに接続要求送信
             const conn = peerInstance.connect('client');
+            setConn(conn);
             conn.on('open', () => {
-                conn.send(peerId);
+                conn.send(JSON.stringify({ type: 'connect_request', peerId }));
+            });
+
+            conn.on('data', data => {
+                if (typeof data === 'string') {
+                    const parsedData = JSON.parse(data);
+                    if (parsedData.type === 'chat_message') {
+                        setMessages(prev => [...prev, { user: parsedData.user, text: parsedData.text }]);
+                    }
+                }
             });
 
             peerInstance.on('call', call => {
-                call.answer(stream);
+                call.answer();
                 call.on('stream', remoteStream => {
                     if (remoteVideoRef.current) {
                         remoteVideoRef.current.srcObject = remoteStream;
@@ -48,22 +55,41 @@ const Viewer = () => {
         });
     };
 
+    const sendMessage = () => {
+        if (conn) {
+            conn.send(JSON.stringify({ type: 'chat_message', user: peerId, text: message }));
+            setMessages(prev => [...prev, { user: peerId, text: message }]);
+            setMessage('');
+        }
+    };
+
     return (
-        <div  style={{ backgroundColor: 'white' }}>
-            <Heading>
-                Viewer
-            </Heading>
+        <div style={{ backgroundColor: 'white' }}>
+            <Heading>Viewer</Heading>
             <div>
                 <FormControl label="peerIdInput">
                     <Input id='peerIdInput' value={peerId} onChange={e => setPeerId(e.target.value)} />
-                    <Button onClick={handleConnect}>
-                        Connect
-                    </Button>
+                    <Button onClick={handleConnect}>Connect</Button>
                 </FormControl>
             </div>
             <div>
-                <video ref={localVideoRef} autoPlay muted></video>
                 <video ref={remoteVideoRef} autoPlay></video>
+            </div>
+            <div>
+                <h2>Chat</h2>
+                <div>
+                    {messages.map((msg, index) => (
+                        <div key={index}>
+                            <strong>{msg.user}:</strong> {msg.text}
+                        </div>
+                    ))}
+                </div>
+                <input
+                    type="text"
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                />
+                <button onClick={sendMessage}>Send</button>
             </div>
         </div>
     );
