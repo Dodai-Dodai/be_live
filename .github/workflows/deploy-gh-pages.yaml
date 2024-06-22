@@ -1,9 +1,6 @@
 name: Deploy GitHub Pages
 
 on:
-  push:
-    branches: ['depTest']
-
   workflow_dispatch:
 
 permissions:
