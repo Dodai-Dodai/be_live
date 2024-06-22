@@ -3,31 +3,16 @@ import { Box, Text, Button } from '@yamada-ui/react';
 import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
-    // localstrageに保存されているuserIDを取得
-    const userID = localStorage.getItem('userID');
-
+    
     return (
+        // home画面: このサイトの説明を記載
         <div>
-            <Text fontSize="2xl" color="blue.500">Your userID is {userID}</Text>
-
-            <Link to="/test">
-                <Button colorScheme="blue">Go to Test Page</Button>
-            </Link>
-
-            <Link to="/about">
-                <Button colorScheme="blue">Go to about Page</Button>
-            </Link>
-
-            <Link to="/client0">
-                <Button colorScheme="blue">Go to client0 Page</Button>
-            </Link>
-
-            <Link to="/viewer">
-                <Button colorScheme="blue">Go to viewer Page</Button>
-            </Link>
-
-            <Link to="/guest">
-                <Button colorScheme="blue">Go to guest Page</Button>
+            <Text fontSize="2xl" color="blue.500">Welcome to the Yamada-UI</Text>
+            <Text fontSize="2xl" color="blue.500">This is a simple UI library for React</Text>
+            <Text fontSize="2xl" color="blue.500">You can use this library to create a simple web application</Text>
+            <Text fontSize="2xl" color="blue.500">Please click the button below to start</Text>
+            <Link to="/login">
+                <Button colorScheme="blue">Go to Login Page</Button>
             </Link>
         </div>
     );
