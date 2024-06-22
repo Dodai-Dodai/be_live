@@ -1,8 +1,6 @@
 import React from 'react';
 import { Box, Text, Button } from '@yamada-ui/react';
 import LoadingExample from '../LoadingExample';
-import '../App.css'; // CSSファイルをインポート
-import '../Anbient.css'; // CSSファイルをインポート
 
 const Test = () => {
     return (
