@@ -24,7 +24,6 @@ const App = () => {
               <Route path='/test' element={<Test />} />
               <Route path='/client0' element={<Client />} />
               <Route path='/viewer' element={<Viewer />} />
-
             </Routes>
           </Router>
         </div>
