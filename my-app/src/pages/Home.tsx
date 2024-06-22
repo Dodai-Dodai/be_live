@@ -3,9 +3,13 @@ import { Box, Text, Button } from '@yamada-ui/react';
 import { Link } from 'react-router-dom';
 
 const Home: React.FC = () => {
+    // localstrageに保存されているuserIDを取得
+    const userID = localStorage.getItem('userID');
+
     return (
         <div>
-            <Text fontSize="2xl" color="blue.500">Home Page</Text>
+            <Text fontSize="2xl" color="blue.500">Your userID is {userID}</Text>
+
             <Link to="/test">
                 <Button colorScheme="blue">Go to Test Page</Button>
             </Link>

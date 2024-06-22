@@ -1,8 +1,24 @@
-import React, {useState, useRef} from 'react';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button, Heading, FormControl, Label, HelperMessage, ErrorMessage, Input, VStack, Center, Grid, GridItem } from '@yamada-ui/react';
-import { Form } from 'react-router-dom';
+import animals from '../animal.json';
 
 const Login: React.FC = () => {
+    const [animalName, setAnimalName] = useState<string>('');
+    const navigate = useNavigate();
+
+    const handleRandomAnimal = () => {
+        const animalList = animals['2'];
+        const randomAnimal = animalList[Math.floor(Math.random() * animalList.length)];
+        setAnimalName(randomAnimal);
+        localStorage.setItem('userID', randomAnimal);
+    };
+
+    const handleNavigate = () => {
+        handleRandomAnimal();
+        navigate('/home', { state: { animalName } });
+    };
+
     return (
         <Center h="100vh" p={4}>
             <VStack maxW="400px" w="100%">
@@ -16,6 +32,8 @@ const Login: React.FC = () => {
                     <Input type="password" />
                 </FormControl>
                 <Button colorScheme="blue" w="100%">Login</Button>
+                
+                <Button colorScheme="gray" w="100%" onClick={handleNavigate}>Guest Login</Button>
             </VStack>
         </Center>
     );
