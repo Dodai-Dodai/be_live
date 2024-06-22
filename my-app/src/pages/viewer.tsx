@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import Peer from 'peerjs';
 import { Button, Heading, FormControl, Label, HelperMessage, ErrorMessage, Input } from '@yamada-ui/react';
 
@@ -15,7 +15,7 @@ const Viewer = () => {
         }
 
         const peerInstance = new Peer(peerId, {
-            host: 'localhost',
+            host: '15.168.12.232',
             port: 9000,
             path: '/'
         });
@@ -49,7 +49,7 @@ const Viewer = () => {
     };
 
     return (
-        <div  style={{ backgroundColor: 'white' }}>
+        <div style={{ backgroundColor: 'white' }}>
             <Heading>
                 Viewer
             </Heading>

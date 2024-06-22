@@ -7,7 +7,7 @@ const Client = () => {
 
     useEffect(() => {
         const peerInstance = new Peer('client', {
-            host: 'localhost',
+            host: '15.168.12.232',
             port: 9000,
             path: '/'
         });

@@ -1,0 +1,78 @@
+/* Aboutページに特化したスタイル */
+.about-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1b1b1b;
+    /* 背景色を少し暗いグレーに設定 */
+    position: relative;
+}
+
+.about-title {
+    font-size: 24px;
+    margin: 20px 0;
+    color: white;
+    /* タイトルの色を白にして見やすくする */
+
+}
+
+.about-video-container {
+    width: 100%;
+    height: calc(100% - 25%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    /* 相対位置指定 */
+
+}
+
+.about-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    /* About Pageタイトルとの間にマージンを追加 */
+}
+
+.about-input {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.about-button {
+    width: 100%;
+}
+
+.display-messages {
+    position: absolute;
+    /* 絶対位置指定 */
+    bottom: 10px;
+    /* 下から10pxの位置 */
+    left: 10px;
+    /* 左から10pxの位置 */
+    z-index: 1;
+    /* 映像の上に表示 */
+}
+
+.message {
+    background-color: rgba(255, 255, 255, 0.8);
+    /* メッセージの背景色（半透明） */
+    padding: 5px 10px;
+    /* メッセージの余白 */
+    border-radius: 5px;
+    /* メッセージの角丸 */
+    margin-bottom: 5px;
+    /* メッセージ間のマージン */
+}
