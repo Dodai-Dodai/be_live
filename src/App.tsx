@@ -10,7 +10,7 @@ import Client from './pages/cast';
 import Viewer from './pages/viewer';
 import Login from './pages/login';
 
-const App = () => {
+function App() {
   const APP_NAME: String = "be_live";
   return (
     <Router>
