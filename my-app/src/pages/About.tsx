@@ -74,6 +74,7 @@ const About: React.FC = () => {
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Textarea
                         placeholder="Enter your message"
+                        _placeholder={{ opacity: 1, color: "white" }}
                         value={inputValue}
                         onChange={handleInputChange}
                         rows={1} // デフォルトで1行表示
@@ -81,7 +82,7 @@ const About: React.FC = () => {
                         style={{ marginRight: '10px' }} // ボタンとの間に少しスペースを追加
                     />
                     <Button
-                        colorScheme="secondary"
+                        colorScheme="gray"
                         variant="outline"
                         rightIcon={<FontAwesomeIcon icon={faAngleUp} />}
                         onClick={handleButtonClick}
