@@ -29,6 +29,10 @@ const Home: React.FC = () => {
                     <Button colorScheme="blue">Go to guest Page</Button>
                 </Link>
 
+                <Link to="/testHost">
+                    <Button colorScheme="blue">Go to testhost Page</Button>
+                </Link>
+
             </div>
         </div>
     );
