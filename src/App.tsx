@@ -10,7 +10,7 @@ import Client from './pages/cast';
 import Viewer from './pages/viewer';
 import Login from './pages/login';
 
-function App() {
+const App = () => {
   const APP_NAME: String = "be_live";
   return (
     <Router>
@@ -22,7 +22,7 @@ function App() {
         <Route path={APP_NAME + '/test'} element={<Test />} />
         <Route path={APP_NAME + '/client0'} element={<Client />} />
         <Route path={APP_NAME + '/viewer'} element={<Viewer />} />
-
+        <Route path='*'>404 Not Found</Route>
       </Routes>
     </Router>
   );
