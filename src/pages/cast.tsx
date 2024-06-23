@@ -17,7 +17,7 @@ const MergedComponent: React.FC = () => {
     const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
     const messageTimeout = 3000;
-    const userID = localStorage.getItem('userID') || 'host';  // Viewer側の名前
+    const userID = localStorage.getItem('userID') || 'unknown_user'; // Fallback if userID is not available
 
     useEffect(() => {
         const peerInstance = new Peer('client', {
@@ -75,15 +75,15 @@ const MergedComponent: React.FC = () => {
 
     const handleButtonClick = () => {
         sendMessage(inputValue);
-        addDisplayMessage(userID, inputValue);
+        addDisplayMessage('client', userID + ": " + inputValue);
         setInputValue(''); // 入力欄をクリア
     };
 
     const sendMessage = (text: string) => {
         connections.forEach(conn => {
-            conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
+            conn.send(JSON.stringify({ type: 'chat_message', user: 'client', text: text }));
         });
-        setMessages(prev => [...prev, { user: userID, text }]);
+        setMessages(prev => [...prev, { user: 'client', text: text }]);
     };
 
     const addDisplayMessage = (user: string, text: string) => {

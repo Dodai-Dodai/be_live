@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Peer from 'peerjs';
 import {
     Textarea,
@@ -22,7 +22,7 @@ const Viewer: React.FC = () => {
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
     const [isConnected, setIsConnected] = useState<boolean>(false);
     const messageTimeout = 3000;
-    const userID = localStorage.getItem('userID') || 'viewer';  // Viewer側の名前
+    const userID = localStorage.getItem('userID') || 'unknown_user'; // Fallback if userID is not available
 
     const handleConnect = () => {
         if (!peerId) {
@@ -30,7 +30,7 @@ const Viewer: React.FC = () => {
             return;
         }
 
-        const peerInstance = new Peer(userID, {
+        const peerInstance = new Peer(peerId, {
             host: '15.168.12.232',
             port: 9000,
             path: '/'
@@ -44,7 +44,7 @@ const Viewer: React.FC = () => {
             const conn = peerInstance.connect('client');
             setConn(conn);
             conn.on('open', () => {
-                conn.send(JSON.stringify({ type: 'connect_request', peerId: userID }));
+                conn.send(JSON.stringify({ type: 'connect_request', peerId }));
                 setIsConnected(true);
             });
 
@@ -77,14 +77,15 @@ const Viewer: React.FC = () => {
 
     const handleButtonClick = () => {
         sendMessage(inputValue);
-        addDisplayMessage(userID, inputValue);
+        addDisplayMessage(peerId, userID + ": " + inputValue);
         setInputValue(''); // 入力欄をクリア
     };
 
     const sendMessage = (text: string) => {
         if (conn) {
-            conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
-            setMessages(prev => [...prev, { user: userID, text }]);
+            const message = `${peerId}: ${userID} ${text}`;
+            conn.send(JSON.stringify({ type: 'chat_message', user: peerId, text: message }));
+            setMessages(prev => [...prev, { user: peerId, text: message }]);
         }
     };
 
@@ -103,13 +104,10 @@ const Viewer: React.FC = () => {
     };
 
     // コンポーネントがアンマウントされるときにタイムアウトをクリアする
-    useEffect(() => {
+    React.useEffect(() => {
         return () => {
             if (displayTimeout) {
                 clearTimeout(displayTimeout);
-            }
-            if (peerRef.current) {
-                peerRef.current.destroy();
             }
         };
     }, [displayTimeout]);
