@@ -1,16 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Peer from 'peerjs';
+import React, { useEffect, useRef, useState } from "react";
+import Peer from "peerjs";
 import {
     Textarea,
-    InputGroup,
-    InputLeftAddon,
-    InputRightAddon,
-    InputLeftElement,
-    InputRightElement,
-} from "@yamada-ui/react"
-import { Button, ButtonGroup } from "@yamada-ui/react"
-import { Icon as FontAwesomeIcon } from "@yamada-ui/fontawesome"
-import { faAngleUp } from "@fortawesome/free-solid-svg-icons"
+    Button,
+} from "@yamada-ui/react";
+import { Icon as FontAwesomeIcon } from "@yamada-ui/fontawesome";
+import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import '../UItest.css'; // CSSファイルをインポート
 
 const MergedComponent: React.FC = () => {
@@ -19,12 +14,18 @@ const MergedComponent: React.FC = () => {
     const [connections, setConnections] = useState<any[]>([]);
     const [messages, setMessages] = useState<{ user: string, text: string }[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
-    const [displayMessages, setDisplayMessages] = useState<string[]>([]);
+    const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
     const messageTimeout = 3000;
 
     useEffect(() => {
-        // カメラ映像の取得
+        const peerInstance = new Peer('client', {
+            host: '15.168.12.232',
+            port: 9000,
+            path: '/'
+        });
+        peerRef.current = peerInstance;
+
         navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true,
@@ -32,13 +33,6 @@ const MergedComponent: React.FC = () => {
             if (localVideoRef.current) {
                 localVideoRef.current.srcObject = stream;
             }
-
-            const peerInstance = new Peer('client', {
-                host: '15.168.12.232',
-                port: 9000,
-                path: '/'
-            });
-            peerRef.current = peerInstance;
 
             peerInstance.on('connection', conn => {
                 setConnections(prev => [...prev, conn]);
@@ -57,6 +51,7 @@ const MergedComponent: React.FC = () => {
                             });
                         } else if (parsedData.type === 'chat_message') {
                             setMessages(prev => [...prev, { user: parsedData.user, text: parsedData.text }]);
+                            addDisplayMessage(parsedData.user, parsedData.text);
                         }
                     }
                 });
@@ -70,7 +65,7 @@ const MergedComponent: React.FC = () => {
             if (peerRef.current) {
                 peerRef.current.destroy();
             }
-        }
+        };
     }, []);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -78,18 +73,9 @@ const MergedComponent: React.FC = () => {
     };
 
     const handleButtonClick = () => {
-        const newMessages = [...displayMessages, inputValue];
-        setDisplayMessages(newMessages);
-        // 一定時間後にメッセージを消す
-        const timeoutId = setTimeout(() => {
-            const filteredMessages = [...displayMessages];
-            filteredMessages.shift(); // 最も古いメッセージを削除
-            setDisplayMessages(filteredMessages);
-        }, messageTimeout);
-        setDisplayTimeout(timeoutId);
-        setInputValue(''); // 入力欄をクリア
-
         sendMessage(inputValue);
+        addDisplayMessage('client', inputValue);
+        setInputValue(''); // 入力欄をクリア
     };
 
     const sendMessage = (text: string) => {
@@ -97,6 +83,20 @@ const MergedComponent: React.FC = () => {
             conn.send(JSON.stringify({ type: 'chat_message', user: 'client', text }));
         });
         setMessages(prev => [...prev, { user: 'client', text }]);
+    };
+
+    const addDisplayMessage = (user: string, text: string) => {
+        const newMessages = [...displayMessages, { user, text }];
+        setDisplayMessages(newMessages);
+        // 一定時間後にメッセージを消す
+        const timeoutId = setTimeout(() => {
+            setDisplayMessages(prevMessages => {
+                const updatedMessages = [...prevMessages];
+                updatedMessages.shift(); // 最も古いメッセージを削除
+                return updatedMessages;
+            });
+        }, messageTimeout);
+        setDisplayTimeout(timeoutId);
     };
 
     // コンポーネントがアンマウントされるときにタイムアウトをクリアする
@@ -115,14 +115,16 @@ const MergedComponent: React.FC = () => {
                 <video ref={localVideoRef} autoPlay muted className="about-video"></video>
                 <div className="display-messages">
                     {displayMessages.map((message, index) => (
-                        <div key={index} className="message">{message}</div>
+                        <div key={index} className="message">
+                            <strong>{message.user}:</strong> {message.text}
+                        </div>
                     ))}
                 </div>
             </div>
             <div className="about-input-container">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Textarea
-                        placeholder="Enter your message"
+                        placeholder="Entermessage"
                         _placeholder={{ opacity: 1, color: "white" }}
                         value={inputValue}
                         onChange={handleInputChange}
@@ -138,16 +140,6 @@ const MergedComponent: React.FC = () => {
                     >
                         Send
                     </Button>
-                </div>
-            </div>
-            <div className="chat-container">
-                <h2>Chat</h2>
-                <div className="chat-messages">
-                    {messages.map((msg, index) => (
-                        <div key={index}>
-                            <strong>{msg.user}:</strong> {msg.text}
-                        </div>
-                    ))}
                 </div>
             </div>
         </div>

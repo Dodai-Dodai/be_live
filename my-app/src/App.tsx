@@ -12,6 +12,8 @@ import Viewer from './pages/viewer';
 import Guest from './pages/guest';
 import Conf from './pages/conf';
 import TestHost from './pages/testHost';
+import TestViewer from './pages/testViewer';
+
 
 const App = () => {
   return (
@@ -29,6 +31,7 @@ const App = () => {
               <Route path='/guest' element={<Guest />} />
               <Route path='/conf' element={<Conf />} />
               <Route path='/testHost' element={<TestHost />} />
+              <Route path='/testViewer' element={<TestViewer />} />
 
 
             </Routes>

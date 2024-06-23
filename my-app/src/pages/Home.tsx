@@ -33,6 +33,10 @@ const Home: React.FC = () => {
                     <Button colorScheme="blue">Go to testhost Page</Button>
                 </Link>
 
+                <Link to="/testViewer">
+                    <Button colorScheme="blue">Go to testViewer Page</Button>
+                </Link>
+
             </div>
         </div>
     );
