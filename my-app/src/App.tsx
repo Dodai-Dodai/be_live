@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, BrowserRouter } from 'react-router-dom';
 import { UIProvider } from '@yamada-ui/react';
 
 import Home from './pages/Home';
@@ -15,7 +15,7 @@ const App = () => {
     <UIProvider>
       <div className="page-background">
         <div className="container">
-          <Router>
+          <BrowserRouter>
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/home' element={<UserPage />} />
@@ -26,7 +26,7 @@ const App = () => {
               <Route path='/viewer' element={<Viewer />} />
 
             </Routes>
-          </Router>
+          </BrowserRouter>
         </div>
       </div>
     </UIProvider>
