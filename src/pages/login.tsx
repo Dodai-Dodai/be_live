@@ -15,8 +15,29 @@ const Login: React.FC = () => {
         localStorage.setItem('userID', randomAnimal);
     };
 
+    const sendUserData = async () => {
+        // ここにユーザー情報を送信する処理を書く
+        try {
+            const response = await fetch('http://localhost:3001/api/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userid: localStorage.getItem('userID'),
+                }),
+            });
+            if (response.ok) {
+                console.log('Success');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
     const handleNavigate = () => {
         handleRandomAnimal();
+        sendUserData();
         navigate('/home', { state: { animalName } });
     };
 
@@ -35,7 +56,7 @@ const Login: React.FC = () => {
                         <Input type="password" />
                     </FormControl>
                     <Button colorScheme="blue" w="100%">Login</Button>
-                    
+
                     <Button colorScheme="gray" w="100%" onClick={handleNavigate}>Guest Login</Button>
                 </VStack>
             </Center>
