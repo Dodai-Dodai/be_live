@@ -11,17 +11,16 @@ import Viewer from './pages/viewer';
 import Login from './pages/login';
 
 const App = () => {
-  const APP_NAME: String = "be_live";
   return (
     <Router>
       <Routes>
-        <Route path={APP_NAME + '/'} element={<Home />} />
-        <Route path={APP_NAME + '/home'} element={<UserPage />} />
-        <Route path={APP_NAME + '/login'} element={<Login />} />
-        <Route path={APP_NAME + '/about'} element={<About />} />
-        <Route path={APP_NAME + '/test'} element={<Test />} />
-        <Route path={APP_NAME + '/client0'} element={<Client />} />
-        <Route path={APP_NAME + '/viewer'} element={<Viewer />} />
+        <Route path={'/'} element={<Home />} />
+        <Route path={'/home'} element={<UserPage />} />
+        <Route path={'/login'} element={<Login />} />
+        <Route path={'/about'} element={<About />} />
+        <Route path={'/test'} element={<Test />} />
+        <Route path={'/client0'} element={<Client />} />
+        <Route path={'/viewer'} element={<Viewer />} />
         <Route path='*'>404 Not Found</Route>
       </Routes>
     </Router>
