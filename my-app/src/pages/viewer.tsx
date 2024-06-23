@@ -149,7 +149,6 @@ const Viewer: React.FC = () => {
                             rightIcon={<FontAwesomeIcon icon={faAngleUp} />}
                             onClick={handleButtonClick}
                         >
-                            Send
                         </Button>
                     </div>
                 </div>
