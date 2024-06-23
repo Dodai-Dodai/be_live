@@ -1,14 +1,27 @@
 import React, { useState, useRef } from 'react';
 import Peer from 'peerjs';
-import { Button, Heading, FormControl, Input } from '@yamada-ui/react';
+import {
+    Textarea,
+    Button,
+    Heading,
+    FormControl,
+    Input
+} from '@yamada-ui/react';
+import { Icon as FontAwesomeIcon } from '@yamada-ui/fontawesome';
+import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import '../UItest.css'; // CSSファイルをインポート
 
-const Viewer = () => {
+const Viewer: React.FC = () => {
     const [peerId, setPeerId] = useState('');
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
     const peerRef = useRef<Peer | null>(null);
     const [conn, setConn] = useState<any>(null);
     const [messages, setMessages] = useState<{ user: string, text: string }[]>([]);
-    const [message, setMessage] = useState<string>('');
+    const [inputValue, setInputValue] = useState<string>('');
+    const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
+    const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
+    const [isConnected, setIsConnected] = useState<boolean>(false);
+    const messageTimeout = 3000;
 
     const handleConnect = () => {
         if (!peerId) {
@@ -17,7 +30,7 @@ const Viewer = () => {
         }
 
         const peerInstance = new Peer(peerId, {
-            host: 'localhost',
+            host: '15.168.12.232',
             port: 9000,
             path: '/'
         });
@@ -31,6 +44,7 @@ const Viewer = () => {
             setConn(conn);
             conn.on('open', () => {
                 conn.send(JSON.stringify({ type: 'connect_request', peerId }));
+                setIsConnected(true);
             });
 
             conn.on('data', data => {
@@ -38,6 +52,7 @@ const Viewer = () => {
                     const parsedData = JSON.parse(data);
                     if (parsedData.type === 'chat_message') {
                         setMessages(prev => [...prev, { user: parsedData.user, text: parsedData.text }]);
+                        addDisplayMessage(parsedData.user, parsedData.text);
                     }
                 }
             });
@@ -55,42 +70,90 @@ const Viewer = () => {
         });
     };
 
-    const sendMessage = () => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setInputValue(event.target.value);
+    };
+
+    const handleButtonClick = () => {
+        sendMessage(inputValue);
+        addDisplayMessage(peerId, inputValue);
+        setInputValue(''); // 入力欄をクリア
+    };
+
+    const sendMessage = (text: string) => {
         if (conn) {
-            conn.send(JSON.stringify({ type: 'chat_message', user: peerId, text: message }));
-            setMessages(prev => [...prev, { user: peerId, text: message }]);
-            setMessage('');
+            conn.send(JSON.stringify({ type: 'chat_message', user: peerId, text }));
+            setMessages(prev => [...prev, { user: peerId, text }]);
         }
     };
 
+    const addDisplayMessage = (user: string, text: string) => {
+        const newMessages = [...displayMessages, { user, text }];
+        setDisplayMessages(newMessages);
+        // 一定時間後にメッセージを消す
+        const timeoutId = setTimeout(() => {
+            setDisplayMessages(prevMessages => {
+                const updatedMessages = [...prevMessages];
+                updatedMessages.shift(); // 最も古いメッセージを削除
+                return updatedMessages;
+            });
+        }, messageTimeout);
+        setDisplayTimeout(timeoutId);
+    };
+
+    // コンポーネントがアンマウントされるときにタイムアウトをクリアする
+    React.useEffect(() => {
+        return () => {
+            if (displayTimeout) {
+                clearTimeout(displayTimeout);
+            }
+        };
+    }, [displayTimeout]);
+
     return (
-        <div style={{ backgroundColor: 'white' }}>
-            <Heading>Viewer</Heading>
-            <div>
-                <FormControl label="peerIdInput">
-                    <Input id='peerIdInput' value={peerId} onChange={e => setPeerId(e.target.value)} />
-                    <Button onClick={handleConnect}>Connect</Button>
-                </FormControl>
-            </div>
-            <div>
-                <video ref={remoteVideoRef} autoPlay></video>
-            </div>
-            <div>
-                <h2>Chat</h2>
-                <div>
-                    {messages.map((msg, index) => (
-                        <div key={index}>
-                            <strong>{msg.user}:</strong> {msg.text}
+        <div className="about-container">
+            <Heading className="about-title">Viewer</Heading>
+            {!isConnected && (
+                <div className="about-input-container">
+                    <FormControl label="peerIdInput" className="about-form-control">
+                        <Input id='peerIdInput' value={peerId} onChange={e => setPeerId(e.target.value)} />
+                        <Button onClick={handleConnect} colorScheme="blue" style={{ marginLeft: '10px' }}>Connect</Button>
+                    </FormControl>
+                </div>
+            )}
+            <div className="about-video-container">
+                <video ref={remoteVideoRef} autoPlay muted className="about-video"></video>
+                <div className="display-messages">
+                    {displayMessages.map((message, index) => (
+                        <div key={index} className="message">
+                            <strong>{message.user}:</strong> {message.text}
                         </div>
                     ))}
                 </div>
-                <input
-                    type="text"
-                    value={message}
-                    onChange={e => setMessage(e.target.value)}
-                />
-                <button onClick={sendMessage}>Send</button>
             </div>
+            {isConnected && (
+                <div className="about-input-container">
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Textarea
+                            placeholder="Enter your message"
+                            _placeholder={{ opacity: 1, color: "white" }}
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            rows={1} // デフォルトで1行表示
+                            resize="none" // ユーザーによるサイズ変更を無効化
+                            style={{ marginRight: '10px' }} // ボタンとの間に少しスペースを追加
+                        />
+                        <Button
+                            colorScheme="gray"
+                            variant="outline"
+                            rightIcon={<FontAwesomeIcon icon={faAngleUp} />}
+                            onClick={handleButtonClick}
+                        >
+                            Send
+                        </Button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
