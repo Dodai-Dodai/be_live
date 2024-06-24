@@ -21,7 +21,7 @@ const Login: React.FC = () => {
         handleRandomAnimal();
         const randomAnimal = localStorage.getItem('userid');
         // animalNameを/adduserに対してpostする
-        const url = 'http://15.168.173.52:8080/api/adduser';
+        const url = 'http://15.168.146.216:8080/api/adduser';
         const data = { userid: randomAnimal };
         const response = await fetch(url, {
             method: 'POST',
