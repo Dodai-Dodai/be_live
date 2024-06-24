@@ -21,7 +21,7 @@ const Login: React.FC = () => {
         handleRandomAnimal();
         const randomAnimal = localStorage.getItem('userid');
         // animalNameを/adduserに対してpostする
-        const url = 'http://be-live.ytakag.com:8080/api/adduser';
+        const url = 'http://be-live.ytakag.com/api/adduser';
         const data = { userid: randomAnimal };
         const response = await fetch(url, {
             method: 'POST',
