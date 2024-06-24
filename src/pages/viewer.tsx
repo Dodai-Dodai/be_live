@@ -22,7 +22,7 @@ const Viewer: React.FC = () => {
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
     const [isConnected, setIsConnected] = useState<boolean>(false);
     const messageTimeout = 3000;
-    const userID = localStorage.getItem('userID') || 'unknown_user'; // Fallback if userID is not available
+    const userID = localStorage.getItem('userID') || 'unknown_user';
 
     const handleConnect = () => {
         if (!peerId) {
@@ -77,15 +77,14 @@ const Viewer: React.FC = () => {
 
     const handleButtonClick = () => {
         sendMessage(inputValue);
-        addDisplayMessage(peerId, userID + ": " + inputValue);
+        addDisplayMessage(userID, inputValue);
         setInputValue(''); // 入力欄をクリア
     };
 
     const sendMessage = (text: string) => {
         if (conn) {
-            const message = `${peerId}: ${userID} ${text}`;
-            conn.send(JSON.stringify({ type: 'chat_message', user: peerId, text: message }));
-            setMessages(prev => [...prev, { user: peerId, text: message }]);
+            conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
+            setMessages(prev => [...prev, { user: userID, text }]);
         }
     };
 
