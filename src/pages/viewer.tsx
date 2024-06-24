@@ -41,8 +41,8 @@ const Viewer: React.FC = () => {
         setPeerId(newPeerId);
 
         const peerInstance = new Peer(newPeerId, {
-            host: '15.168.146.216',
-            port: 9000,
+            host: 'be-live.ytakag.com',
+            port: 443,
             path: '/peerjs',
             secure: true,
         });
