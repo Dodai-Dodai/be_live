@@ -21,7 +21,7 @@ const MergedComponent: React.FC = () => {
 
     useEffect(() => {
         const peerInstance = new Peer('client', {
-            host: 'be_live.ytakag.com',
+            host: 'be-live.ytakag.com',
             port: 9000,
             path: '/'
         });
