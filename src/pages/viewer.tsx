@@ -81,9 +81,11 @@ const Viewer: React.FC = () => {
 
     const sendMessage = (text: string) => {
         if (conn) {
-            conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
+            const message = { type: 'chat_message', user: userID, text };
+            conn.send(JSON.stringify(message)); // Viewerから直接クライアントに送信
         }
     };
+
 
     const addDisplayMessage = (user: string, text: string) => {
         const newMessages = [...displayMessages, { user, text }];
