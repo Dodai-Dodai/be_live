@@ -51,8 +51,9 @@ const MergedComponent: React.FC = () => {
                                 remoteVideo.srcObject = remoteStream;
                             });
                         } else if (parsedData.type === 'chat_message') {
-                            setMessages(prev => [...prev, { user: parsedData.user, text: parsedData.text }]);
-                            addDisplayMessage(parsedData.user, parsedData.text);
+                            const message = { user: parsedData.user, text: parsedData.text };
+                            setMessages(prev => [...prev, message]);
+                            addDisplayMessage(message.user, message.text);
                         }
                     }
                 });
@@ -80,12 +81,10 @@ const MergedComponent: React.FC = () => {
     };
 
     const sendMessage = (text: string) => {
-        if (connections.length > 0) {
-            connections.forEach(conn => {
-                conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
-            });
-            setMessages(prev => [...prev, { user: userID, text }]);
-        }
+        connections.forEach(conn => {
+            conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
+        });
+        setMessages(prev => [...prev, { user: userID, text }]);
     };
 
     const addDisplayMessage = (user: string, text: string) => {
@@ -103,7 +102,7 @@ const MergedComponent: React.FC = () => {
     };
 
     // コンポーネントがアンマウントされるときにタイムアウトをクリアする
-    React.useEffect(() => {
+    useEffect(() => {
         return () => {
             if (displayTimeout) {
                 clearTimeout(displayTimeout);
@@ -112,8 +111,9 @@ const MergedComponent: React.FC = () => {
     }, [displayTimeout]);
 
     return (
-        <div>
-            <div className="about-container">
+        <div className="about-container">
+            <h1 className="about-title">Be Live Client</h1>
+            <div className="about-video-container">
                 <video ref={localVideoRef} autoPlay muted className="about-video"></video>
                 <div className="display-messages">
                     {displayMessages.map((message, index) => (
@@ -122,6 +122,8 @@ const MergedComponent: React.FC = () => {
                         </div>
                     ))}
                 </div>
+            </div>
+            <div className="about-input-container">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Textarea
                         placeholder="comment"

@@ -16,6 +16,7 @@ const Viewer: React.FC = () => {
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
     const peerRef = useRef<Peer | null>(null);
     const [conn, setConn] = useState<any>(null);
+    const [connections, setConnections] = useState<any[]>([]);
     const [messages, setMessages] = useState<{ user: string, text: string }[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
     const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
@@ -82,10 +83,10 @@ const Viewer: React.FC = () => {
     };
 
     const sendMessage = (text: string) => {
-        if (conn) {
+        connections.forEach(conn => {
             conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
-            setMessages(prev => [...prev, { user: userID, text }]);
-        }
+        });
+        setMessages(prev => [...prev, { user: userID, text }]);
     };
 
     const addDisplayMessage = (user: string, text: string) => {
