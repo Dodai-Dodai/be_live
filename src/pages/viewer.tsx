@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Peer from 'peerjs';
 import {
     Textarea,
@@ -31,16 +31,14 @@ const Viewer: React.FC = () => {
         }
 
         const peerInstance = new Peer(peerId, {
+
             host: 'be-live.ytakag.com',
             port: 9000,
             path: '/'
         });
         peerRef.current = peerInstance;
 
-        navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: true
-        }).then(stream => {
+        peerInstance.on('open', () => {
             const conn = peerInstance.connect('client');
             setConn(conn);
             conn.on('open', () => {
@@ -49,10 +47,14 @@ const Viewer: React.FC = () => {
             });
 
             conn.on('data', data => {
+                console.log(data);
                 if (typeof data === 'string') {
                     const parsedData = JSON.parse(data);
+                    console.log(parsedData);
                     if (parsedData.type === 'chat_message') {
-                        setMessages(prev => [...prev, { user: parsedData.user, text: parsedData.text }]);
+                        
+                        console.log(parsedData.type + parsedData.user + parsedData.text);
+                        //setMessages(prev => [...prev, { user: parsedData.user, text: parsedData.text }]);
                         addDisplayMessage(parsedData.user, parsedData.text);
                     }
                 }
@@ -66,8 +68,10 @@ const Viewer: React.FC = () => {
                     }
                 });
             });
-        }).catch(err => {
-            console.log('Error accessing media devices', err);
+        });
+
+        peerInstance.on('error', err => {
+            console.log('Error connecting to PeerJS server:', err);
         });
     };
 
@@ -77,21 +81,20 @@ const Viewer: React.FC = () => {
 
     const handleButtonClick = () => {
         sendMessage(inputValue);
-        addDisplayMessage(userID, inputValue);
         setInputValue(''); // 入力欄をクリア
     };
 
     const sendMessage = (text: string) => {
         if (conn) {
-            conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
-            setMessages(prev => [...prev, { user: userID, text }]);
+            const message = { type: 'chat_message', user: userID, text };
+            conn.send(JSON.stringify(message)); // Viewerから直接クライアントに送信
         }
     };
+
 
     const addDisplayMessage = (user: string, text: string) => {
         const newMessages = [...displayMessages, { user, text }];
         setDisplayMessages(newMessages);
-        // 一定時間後にメッセージを消す
         const timeoutId = setTimeout(() => {
             setDisplayMessages(prevMessages => {
                 const updatedMessages = [...prevMessages];
@@ -102,14 +105,35 @@ const Viewer: React.FC = () => {
         setDisplayTimeout(timeoutId);
     };
 
-    // コンポーネントがアンマウントされるときにタイムアウトをクリアする
-    React.useEffect(() => {
+    useEffect(() => {
         return () => {
             if (displayTimeout) {
                 clearTimeout(displayTimeout);
             }
         };
     }, [displayTimeout]);
+
+    useEffect(() => {
+        const handleMessageFromClient = (data: any) => {
+            if (typeof data === 'string') {
+                const parsedData = JSON.parse(data);
+                if (parsedData.type === 'chat_message') {
+                    setMessages(prev => [...prev, { user: parsedData.user, text: parsedData.text }]);
+                    addDisplayMessage(parsedData.user, parsedData.text);
+                }
+            }
+        };
+
+        if (conn) {
+            conn.on('data', handleMessageFromClient);
+        }
+
+        return () => {
+            if (conn) {
+                conn.off('data', handleMessageFromClient);
+            }
+        };
+    }, [conn]);
 
     return (
         <div className="about-container">
@@ -140,9 +164,9 @@ const Viewer: React.FC = () => {
                             _placeholder={{ opacity: 1, color: "white" }}
                             value={inputValue}
                             onChange={handleInputChange}
-                            rows={1} // デフォルトで1行表示
-                            resize="none" // ユーザーによるサイズ変更を無効化
-                            style={{ marginRight: '10px' }} // ボタンとの間に少しスペースを追加
+                            rows={1}
+                            resize="none"
+                            style={{ marginRight: '10px' }}
                         />
                         <Button
                             colorScheme="gray"
