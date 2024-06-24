@@ -21,7 +21,8 @@ const MergedComponent: React.FC = () => {
         const peerInstance = new Peer('client', {
             host: '15.168.146.216',
             port: 9000,
-            path: '/'
+            path: '/peerjs',
+            secure: true
         });
         peerRef.current = peerInstance;
 
