@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Peer from "peerjs";
-import {
-    Textarea,
-    Button,
-} from "@yamada-ui/react";
+import { Textarea, Button } from "@yamada-ui/react";
 import { Icon as FontAwesomeIcon } from "@yamada-ui/fontawesome";
 import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import '../UItest.css'; // CSSファイルをインポート
@@ -54,6 +51,12 @@ const MergedComponent: React.FC = () => {
                             const message = { user: parsedData.user, text: parsedData.text };
                             setMessages(prev => [...prev, message]);
                             addDisplayMessage(message.user, message.text);
+                            // Broadcast the message to all other viewers
+                            connections.forEach(connection => {
+                                if (connection.peer !== conn.peer) {
+                                    connection.send(JSON.stringify(parsedData));
+                                }
+                            });
                         }
                     }
                 });
@@ -76,21 +79,21 @@ const MergedComponent: React.FC = () => {
 
     const handleButtonClick = () => {
         sendMessage(inputValue);
-        addDisplayMessage(userID, inputValue);
         setInputValue(''); // 入力欄をクリア
     };
 
     const sendMessage = (text: string) => {
+        const message = { type: 'chat_message', user: userID, text };
         connections.forEach(conn => {
-            conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
+            conn.send(JSON.stringify(message));
         });
         setMessages(prev => [...prev, { user: userID, text }]);
+        addDisplayMessage(userID, text);
     };
 
     const addDisplayMessage = (user: string, text: string) => {
         const newMessages = [...displayMessages, { user, text }];
         setDisplayMessages(newMessages);
-        // 一定時間後にメッセージを消す
         const timeoutId = setTimeout(() => {
             setDisplayMessages(prevMessages => {
                 const updatedMessages = [...prevMessages];
@@ -101,7 +104,6 @@ const MergedComponent: React.FC = () => {
         setDisplayTimeout(timeoutId);
     };
 
-    // コンポーネントがアンマウントされるときにタイムアウトをクリアする
     useEffect(() => {
         return () => {
             if (displayTimeout) {
@@ -130,9 +132,9 @@ const MergedComponent: React.FC = () => {
                         _placeholder={{ opacity: 1, color: "white" }}
                         value={inputValue}
                         onChange={handleInputChange}
-                        rows={1} // デフォルトで1行表示
-                        resize="none" // ユーザーによるサイズ変更を無効化
-                        style={{ marginRight: '10px' }} // ボタンとの間に少しスペースを追加
+                        rows={1}
+                        resize="none"
+                        style={{ marginRight: '10px' }}
                     />
                     <Button
                         colorScheme="gray"
