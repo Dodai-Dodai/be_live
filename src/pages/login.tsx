@@ -12,12 +12,29 @@ const Login: React.FC = () => {
         const animalList = animals['2'];
         const randomAnimal = animalList[Math.floor(Math.random() * animalList.length)];
         setAnimalName(randomAnimal);
-        localStorage.setItem('userID', randomAnimal);
+        localStorage.setItem('userid', randomAnimal);
     };
 
-    const handleNavigate = () => {
+    const handleNavigate = async () => {
+        // localStorageの中身を削除
+        localStorage.removeItem('userid');
         handleRandomAnimal();
-        navigate('/home', { state: { animalName } });
+        const randomAnimal = localStorage.getItem('userid');
+        // animalNameを/adduserに対してpostする
+        const url = 'http://be-live.ytakag.com:8080/api/adduser';
+        const data = { userid: randomAnimal };
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        if (response.ok) {
+            navigate('/home', { state: { randomAnimal } });
+        } else {
+            alert('Failed to login');
+        }
     };
 
     return (

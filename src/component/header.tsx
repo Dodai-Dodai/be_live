@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Header: React.FC = () => {
     // もしlocalStorageにuserIDが保存されていれば取得
-    const userID = localStorage.getItem('userID');
+    const userID = localStorage.getItem('userid');
     // 画面上部に表示する // userIDがあればそれも一緒に表示
 
     return (
