@@ -11,6 +11,18 @@ import { Icon as FontAwesomeIcon } from '@yamada-ui/fontawesome';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import '../UItest.css'; // CSSファイルをインポート
 
+const generatePeerID = () => {
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < 16; i++) {
+        if (i > 0 && i % 4 === 0) {
+            result += '-';
+        }
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+};
+
 const Viewer: React.FC = () => {
     const [peerId, setPeerId] = useState('');
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -25,13 +37,10 @@ const Viewer: React.FC = () => {
     const userID = localStorage.getItem('userID') || 'unknown_user';
 
     const handleConnect = () => {
-        if (!peerId) {
-            alert('Peer ID is required');
-            return;
-        }
+        const newPeerId = generatePeerID();
+        setPeerId(newPeerId);
 
-        const peerInstance = new Peer(peerId, {
-
+        const peerInstance = new Peer(newPeerId, {
             host: '15.168.146.216',
             port: 9000,
             path: '/'
@@ -42,7 +51,7 @@ const Viewer: React.FC = () => {
             const conn = peerInstance.connect('client');
             setConn(conn);
             conn.on('open', () => {
-                conn.send(JSON.stringify({ type: 'connect_request', peerId }));
+                conn.send(JSON.stringify({ type: 'connect_request', peerId: newPeerId }));
                 setIsConnected(true);
             });
 
@@ -52,9 +61,7 @@ const Viewer: React.FC = () => {
                     const parsedData = JSON.parse(data);
                     console.log(parsedData);
                     if (parsedData.type === 'chat_message') {
-                        
                         console.log(parsedData.type + parsedData.user + parsedData.text);
-                        //setMessages(prev => [...prev, { user: parsedData.user, text: parsedData.text }]);
                         addDisplayMessage(parsedData.user, parsedData.text);
                     }
                 }
@@ -90,7 +97,6 @@ const Viewer: React.FC = () => {
             conn.send(JSON.stringify(message)); // Viewerから直接クライアントに送信
         }
     };
-
 
     const addDisplayMessage = (user: string, text: string) => {
         const newMessages = [...displayMessages, { user, text }];
@@ -141,7 +147,6 @@ const Viewer: React.FC = () => {
             {!isConnected && (
                 <div className="about-input-container">
                     <FormControl label="peerIdInput" className="about-form-control">
-                        <Input id='peerIdInput' value={peerId} onChange={e => setPeerId(e.target.value)} />
                         <Button onClick={handleConnect} colorScheme="blue" style={{ marginLeft: '10px' }}>Connect</Button>
                     </FormControl>
                 </div>
