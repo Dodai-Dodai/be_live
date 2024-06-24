@@ -31,7 +31,7 @@ const Viewer: React.FC = () => {
         }
 
         const peerInstance = new Peer(peerId, {
-            host: 'be_live.ytakag.com',
+            host: 'be-live.ytakag.com',
             port: 9000,
             path: '/'
         });
