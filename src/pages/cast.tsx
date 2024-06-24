@@ -21,7 +21,7 @@ const MergedComponent: React.FC = () => {
 
     useEffect(() => {
         const peerInstance = new Peer('client', {
-            host: '15.168.12.232',
+            host: '15.168.173.52',
             port: 9000,
             path: '/'
         });
@@ -80,10 +80,12 @@ const MergedComponent: React.FC = () => {
     };
 
     const sendMessage = (text: string) => {
-        connections.forEach(conn => {
-            conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
-        });
-        setMessages(prev => [...prev, { user: userID, text }]);
+        if (connections.length > 0) {
+            connections.forEach(conn => {
+                conn.send(JSON.stringify({ type: 'chat_message', user: userID, text }));
+            });
+            setMessages(prev => [...prev, { user: userID, text }]);
+        }
     };
 
     const addDisplayMessage = (user: string, text: string) => {
@@ -101,7 +103,7 @@ const MergedComponent: React.FC = () => {
     };
 
     // コンポーネントがアンマウントされるときにタイムアウトをクリアする
-    useEffect(() => {
+    React.useEffect(() => {
         return () => {
             if (displayTimeout) {
                 clearTimeout(displayTimeout);
@@ -110,9 +112,8 @@ const MergedComponent: React.FC = () => {
     }, [displayTimeout]);
 
     return (
-        <div className="about-container">
-            <h1 className="about-title">Be Live Client</h1>
-            <div className="about-video-container">
+        <div>
+            <div className="about-container">
                 <video ref={localVideoRef} autoPlay muted className="about-video"></video>
                 <div className="display-messages">
                     {displayMessages.map((message, index) => (
@@ -121,8 +122,6 @@ const MergedComponent: React.FC = () => {
                         </div>
                     ))}
                 </div>
-            </div>
-            <div className="about-input-container">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Textarea
                         placeholder="comment"
