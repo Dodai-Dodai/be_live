@@ -32,6 +32,16 @@ const MergedComponent: React.FC = () => {
                 localVideoRef.current.srcObject = stream;
             }
 
+            // Viewerからのメッセージを中継する
+            const handleViewerMessage = (message: any) => {
+                connections.forEach(connection => {
+                    if (connection.peer !== peerRef.current?.id) {
+                        connection.send(JSON.stringify(message));
+                    }
+                });
+            };
+
+
             peerInstance.on('connection', conn => {
                 setConnections(prev => [...prev, conn]);
 
@@ -51,12 +61,7 @@ const MergedComponent: React.FC = () => {
                             const message = { user: parsedData.user, text: parsedData.text };
                             setMessages(prev => [...prev, message]);
                             addDisplayMessage(message.user, message.text);
-                            // Broadcast the message to all other viewers
-                            connections.forEach(connection => {
-                                if (connection.peer !== conn.peer) {
-                                    connection.send(JSON.stringify(parsedData));
-                                }
-                            });
+                            // viewerへの再送部分
                         }
                     }
                 });
