@@ -8,6 +8,7 @@ import '../UItest.css'; // CSSファイルをインポート
 const MergedComponent: React.FC = () => {
     const localVideoRef = useRef<HTMLVideoElement | null>(null);
     const peerRef = useRef<Peer | null>(null);
+    const connectionsRef = useRef<any[]>([]);
     const [connections, setConnections] = useState<any[]>([]);
     const [messages, setMessages] = useState<{ user: string, text: string }[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
@@ -18,7 +19,7 @@ const MergedComponent: React.FC = () => {
 
     useEffect(() => {
         const peerInstance = new Peer('client', {
-            host: '15.168.173.52',
+            host: 'localhost',
             port: 9000,
             path: '/'
         });
@@ -32,22 +33,26 @@ const MergedComponent: React.FC = () => {
                 localVideoRef.current.srcObject = stream;
             }
 
-            // Viewerからのメッセージを中継する
             const handleViewerMessage = (message: any) => {
-                connections.forEach(connection => {
+                connectionsRef.current.forEach(connection => {
                     if (connection.peer !== peerRef.current?.id) {
                         connection.send(JSON.stringify(message));
                     }
                 });
             };
 
-
             peerInstance.on('connection', conn => {
-                setConnections(prev => [...prev, conn]);
+                setConnections(prev => {
+                    const newConnections = [...prev, conn];
+                    connectionsRef.current = newConnections;
+                    return newConnections;
+                });
 
                 conn.on('data', data => {
                     if (typeof data === 'string') {
+                        console.log(data);
                         const parsedData = JSON.parse(data);
+                        console.log(parsedData);
                         if (parsedData.type === 'connect_request') {
                             const call = peerInstance.call(parsedData.peerId, stream);
                             call.on('stream', remoteStream => {
@@ -58,10 +63,8 @@ const MergedComponent: React.FC = () => {
                                 remoteVideo.srcObject = remoteStream;
                             });
                         } else if (parsedData.type === 'chat_message') {
-                            const message = { user: parsedData.user, text: parsedData.text };
-                            setMessages(prev => [...prev, message]);
-                            addDisplayMessage(message.user, message.text);
-                            // viewerへの再送部分
+                            sendMessage(parsedData.user, parsedData.text);
+                            addDisplayMessage(parsedData.user, parsedData.text);
                         }
                     }
                 });
@@ -83,17 +86,19 @@ const MergedComponent: React.FC = () => {
     };
 
     const handleButtonClick = () => {
-        sendMessage(inputValue);
+        sendMessage(userID, inputValue);
+        addDisplayMessage(userID, inputValue);
         setInputValue(''); // 入力欄をクリア
     };
 
-    const sendMessage = (text: string) => {
-        const message = { type: 'chat_message', user: userID, text };
-        connections.forEach(conn => {
+    const sendMessage = (user: string, text: string) => {
+        const message = { type: 'chat_message', user, text };
+        console.log("sendするメッセージ：" + message);
+        connectionsRef.current.forEach(conn => {
+            console.log("sendするメッセージ：" + JSON.stringify(message));
             conn.send(JSON.stringify(message));
         });
-        setMessages(prev => [...prev, { user: userID, text }]);
-        addDisplayMessage(userID, text);
+        setMessages(prev => [...prev, { user, text }]);
     };
 
     const addDisplayMessage = (user: string, text: string) => {

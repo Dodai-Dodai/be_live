@@ -31,7 +31,7 @@ const Viewer: React.FC = () => {
         }
 
         const peerInstance = new Peer(peerId, {
-            host: '15.168.173.52',
+            host: 'localhost',
             port: 9000,
             path: '/'
         });
@@ -46,10 +46,14 @@ const Viewer: React.FC = () => {
             });
 
             conn.on('data', data => {
+                console.log(data);
                 if (typeof data === 'string') {
                     const parsedData = JSON.parse(data);
+                    console.log(parsedData);
                     if (parsedData.type === 'chat_message') {
-                        setMessages(prev => [...prev, { user: parsedData.user, text: parsedData.text }]);
+                        
+                        console.log(parsedData.type + parsedData.user + parsedData.text);
+                        //setMessages(prev => [...prev, { user: parsedData.user, text: parsedData.text }]);
                         addDisplayMessage(parsedData.user, parsedData.text);
                     }
                 }
