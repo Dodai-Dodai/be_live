@@ -145,8 +145,8 @@ const MergedComponent: React.FC = () => {
             clearTimeout(displayTimeout);
         }
         const timer = setTimeout(() => {
-            navigate('/'); // 1分後に/へリダイレクト
-        }, 60000);
+            navigate('/'); // 指定時間後に/へリダイレクト
+        }, 30000);
 
         return () => {
             clearTimeout(timer);
