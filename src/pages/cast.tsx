@@ -157,7 +157,7 @@ const MergedComponent: React.FC = () => {
         <div className="about-container">
             <h1 className="about-title">Be Live Client</h1>
             <div className="about-video-container">
-                <video ref={localVideoRef} autoPlay muted className="about-video"></video>
+                <video ref={localVideoRef} autoPlay muted playsInline className="about-video"></video>
                 <div className="display-messages">
                     {displayMessages.map((message, index) => (
                         <div key={index} className="message">

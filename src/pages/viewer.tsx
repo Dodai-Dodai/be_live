@@ -185,7 +185,7 @@ const Viewer: React.FC = () => {
                 </div>
             )}
             <div className="about-video-container">
-                <video ref={remoteVideoRef} autoPlay className="about-video"></video>
+                <video ref={remoteVideoRef} autoPlay playsInline className="about-video"></video>
                 <div className="display-messages">
                     {displayMessages.map((message, index) => (
                         <div key={index} className="message">
