@@ -7,6 +7,23 @@ const UserPage: React.FC = () => {
     // localstrageに保存されているuserIDを取得
     const userID = localStorage.getItem('userID');
 
+
+    //ランダムマッチング用
+    const handleNavigate = async () => {
+        const randomAnimal = localStorage.getItem('userid');
+        // animalNameを/adduserに対してpostする
+        const url = 'https://be-live.ytakag.com/api/randomuser';
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('リクエストエラー:', error);
+            });
+
+    };
+
     return (
         <div>
             <Header />
@@ -31,6 +48,9 @@ const UserPage: React.FC = () => {
             <Link to="/guest">
                 <Button colorScheme="blue">Go to guest Page</Button>
             </Link>
+
+            <Button colorScheme="primary" w="100%" onClick={handleNavigate}>確認</Button>
+
         </div>
     );
 };
