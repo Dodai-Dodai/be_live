@@ -5,7 +5,14 @@ import {
     Button,
     Heading,
     FormControl,
-    Input
+    Modal,
+    ModalOverlay,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+    Box
 } from '@yamada-ui/react';
 import { Icon as FontAwesomeIcon } from '@yamada-ui/fontawesome';
 import { faAngleUp, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
@@ -23,8 +30,6 @@ const generatePeerID = () => {
     return result;
 };
 
-
-
 const Viewer: React.FC = () => {
     const [peerId, setPeerId] = useState('');
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -35,6 +40,7 @@ const Viewer: React.FC = () => {
     const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
     const [isConnected, setIsConnected] = useState<boolean>(false);
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const messageTimeout = 3000;
     const userID = localStorage.getItem('userID') || 'unknown_user';
 
@@ -154,6 +160,20 @@ const Viewer: React.FC = () => {
         };
     }, []);
 
+    useEffect(() => {
+        const handlePermissionRequest = async () => {
+            try {
+                await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                onClose(); // Close the permission modal if permissions are granted
+            } catch (error) {
+                console.error("Permission denied for video/audio", error);
+            }
+        };
+
+        onOpen(); // Open the permission request modal
+        handlePermissionRequest(); // Request permission when the component mounts
+    }, [onOpen, onClose]);
+
     return (
         <div className="about-container">
             <Heading className="about-title">Viewer</Heading>
@@ -197,6 +217,24 @@ const Viewer: React.FC = () => {
                     </div>
                 </div>
             )}
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <Box>
+                    <ModalHeader>カメラとマイクの使用許可</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        このサイトはカメラとマイクの使用を求めています。許可しますか？
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button colorScheme="blue" mr={3} onClick={async () => {
+                            await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                            onClose();
+                        }}>
+                            許可
+                        </Button>
+                    </ModalFooter>
+                </Box>
+            </Modal>
         </div>
     );
 
