@@ -5,7 +5,6 @@ import {
     Button,
     Heading,
     FormControl,
-    Input
 } from '@yamada-ui/react';
 import { Icon as FontAwesomeIcon } from '@yamada-ui/fontawesome';
 import { faAngleUp, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
@@ -142,6 +141,16 @@ const Viewer: React.FC = () => {
         };
     }, [conn]);
 
+    //このページに移動してから1分後に'/'にリダイレクトする
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            window.location.href = '/';
+        }, 60000);
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, []);
+
     return (
         <div className="about-container">
             <Heading className="about-title">Viewer</Heading>
@@ -153,7 +162,7 @@ const Viewer: React.FC = () => {
                 </div>
             )}
             <div className="about-video-container">
-                <video ref={remoteVideoRef} autoPlay className="about-video"></video>
+                <video ref={remoteVideoRef} autoPlay playsInline className="about-video"></video>
                 <div className="display-messages">
                     {displayMessages.map((message, index) => (
                         <div key={index} className="message">
