@@ -23,6 +23,8 @@ const generatePeerID = () => {
     return result;
 };
 
+
+
 const Viewer: React.FC = () => {
     const [peerId, setPeerId] = useState('');
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -142,6 +144,16 @@ const Viewer: React.FC = () => {
         };
     }, [conn]);
 
+    //このページに移動してから1分後に'/'にリダイレクトする
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            window.location.href = '/';
+        }, 60000);
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, []);
+
     return (
         <div className="about-container">
             <Heading className="about-title">Viewer</Heading>
@@ -187,6 +199,7 @@ const Viewer: React.FC = () => {
             )}
         </div>
     );
+
 };
 
 export default Viewer;
