@@ -29,10 +29,10 @@ const MergedComponent: React.FC = () => {
     const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const timeout = 3000;
+    const timeout = 30000;
     const userID = localStorage.getItem('userID') || 'unknown_user';
     const navigate = useNavigate(); // For navigation
-    const [countdown, setCountdown] = useState<number>(60); // Countdown state initialized to 60 seconds
+    const [countdown, setCountdown] = useState<number>(timeout/1000); // Countdown state initialized to 60 seconds
 
     useEffect(() => {
         const handlePermissionRequest = async () => {
@@ -186,8 +186,8 @@ const MergedComponent: React.FC = () => {
                         onChange={handleInputChange}
                         rows={1}
                         resize="none"
-                        style={{ marginRight: '10px' }}
-                        width="500"
+                        style={{ marginRight: '10px', fontSize: '16px'}}
+                        width="300"
                     />
                     <Button
                         colorScheme="gray"

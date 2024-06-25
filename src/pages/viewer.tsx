@@ -181,7 +181,7 @@ const Viewer: React.FC = () => {
                             onChange={handleInputChange}
                             rows={1}
                             resize="none"
-                            style={{ marginRight: '10px' }}
+                            style={{ marginRight: '10px', fontSize: '16px' }}
                             width="500"
                         />
                         <Button
