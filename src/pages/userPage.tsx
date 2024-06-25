@@ -5,12 +5,12 @@ import Header from '../component/header';
 
 const UserPage: React.FC = () => {
     // localstrageに保存されているuserIDを取得
-    const userID = localStorage.getItem('userID');
+    const userid = localStorage.getItem('userID');
 
     return (
         <div>
             <Header />
-            <Text fontSize="2xl" color="blue.500">Your userID is {userID}</Text>
+            <Text fontSize="2xl" color="blue.500">Your userID is {userid}</Text>
 
             <Link to="/test">
                 <Button colorScheme="blue">Go to Test Page</Button>
