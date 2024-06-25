@@ -20,7 +20,13 @@ const isLocalhost = Boolean(
 
 export function register(config) {
   console.log('Service worker registration start.'); // デバッグログ追加
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if(process.env.NODE_ENV === 'production') {
+    console.log('Service worker registration is only available in production mode.'); // デバッグログ追加
+  }
+  if('serviceWorker' in navigator) {
+    console.log('Service worker is supported in this browser.'); // デバッグログ追加
+  }
+  if (/*process.env.NODE_ENV === 'production' && */'serviceWorker' in navigator) {
     console.log('Service worker is supported in this browser.'); // デバッグログ追加
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
