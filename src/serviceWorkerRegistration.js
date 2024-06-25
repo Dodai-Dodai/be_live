@@ -42,6 +42,7 @@ export function register(config) {
       console.log('Service worker URL:', swUrl); // デバッグログ追加
 
       if (isLocalhost) {
+        console.log('This is running on localhost.'); // デバッグログ追加
         // This is running on localhost. Let's check if a service worker still exists or not.
         checkValidServiceWorker(swUrl, config);
 
@@ -54,6 +55,7 @@ export function register(config) {
           );
         });
       } else {
+        console.log('This is not running on localhost.'); // デバッグログ追加
         // Is not localhost. Just register service worker
         registerValidSW(swUrl, config);
       }
