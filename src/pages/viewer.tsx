@@ -5,9 +5,10 @@ import {
     Button,
     Heading,
     FormControl,
+    Box,
 } from '@yamada-ui/react';
 import { Icon as FontAwesomeIcon } from '@yamada-ui/fontawesome';
-import { faAngleUp, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import '../UItest.css'; // CSSファイルをインポート
 
 const generatePeerID = () => {
@@ -32,8 +33,10 @@ const Viewer: React.FC = () => {
     const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
     const [isConnected, setIsConnected] = useState<boolean>(false);
-    const messageTimeout = 3000;
-    const userID = localStorage.getItem('userID') || 'unknown_user';
+    const timeout = 30000;
+    const [countdown, setCountdown] = useState<number>(timeout / 1000);
+
+    const userID = localStorage.getItem('userid') || 'unknown_user';
 
     const handleConnect = () => {
         const newPeerId = generatePeerID();
@@ -107,7 +110,7 @@ const Viewer: React.FC = () => {
                 updatedMessages.shift(); // 最も古いメッセージを削除
                 return updatedMessages;
             });
-        }, messageTimeout);
+        }, timeout);
         setDisplayTimeout(timeoutId);
     };
 
@@ -145,11 +148,30 @@ const Viewer: React.FC = () => {
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             window.location.href = '/';
-        }, 60000);
+        }, timeout);
         return () => {
             clearTimeout(timeoutId);
         };
     }, []);
+
+    // カウントダウンロジックを追加
+    useEffect(() => {
+        if (isConnected) {
+            const intervalId = setInterval(() => {
+                setCountdown(prevCountdown => {
+                    if (prevCountdown > 0) {
+                        return prevCountdown - 1;
+                    } else {
+                        clearInterval(intervalId);
+                        return 0;
+                    }
+                });
+            }, 1000);
+            return () => {
+                clearInterval(intervalId);
+            };
+        }
+    }, [isConnected]);
 
     return (
         <div className="about-container">
@@ -174,6 +196,9 @@ const Viewer: React.FC = () => {
             {isConnected && (
                 <div className="about-input-container">
                     <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Box fontSize="lg" marginRight="10px" color="gray">
+                            {countdown} 秒
+                        </Box>
                         <Textarea
                             placeholder="コメントを入力"
                             _placeholder={{ opacity: 0.5, color: "gray" }}
@@ -181,8 +206,7 @@ const Viewer: React.FC = () => {
                             onChange={handleInputChange}
                             rows={1}
                             resize="none"
-                            style={{ marginRight: '10px', fontSize: '16px' }}
-                            width="500"
+                            style={{ marginRight: '10px', fontSize: '16px', width: '80%' }}
                         />
                         <Button
                             colorScheme="gray"
