@@ -14,20 +14,30 @@ const Header: React.FC = () => {
             alignItems="center"
             padding="10px 20px"
             borderBottom="1px solid #ddd"
+            backgroundColor="gray.900" // 背景色をグレーに設定
         >
-            <Link to="/">
-                <Text>be_live</Text>
-            </Link>
+            <Button variant="outline" colorScheme="test" size="lg">
+                <Link to="/">
+                    be_live
+                </Link>
+            </Button>
+
             <Box>
-                {userID && <Text marginRight="10px">{userID} さん</Text>}
-                <Link to="/login">
-                    <Button marginRight="10px">ログイン</Button>
-                </Link>
-                <Link to="/signup">
-                    <Button>新規登録</Button>
-                </Link>
-            </Box>
-        </Box>
+                {userID && <Text marginRight="10px" color="primary">{userID} さん</Text>}
+                <Button variant="outline" colorScheme="test">
+                    <Link to="/login">
+                        ログイン
+                    </Link>
+                </Button>
+
+                <Button variant="outline" colorScheme="test">
+                    <Link to="/signup">
+                        新規登録
+                    </Link>
+                </Button>
+
+            </Box >
+        </Box >
     );
 };
 

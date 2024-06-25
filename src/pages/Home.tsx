@@ -2,16 +2,17 @@ import React from 'react';
 import { Box, Text, Button } from '@yamada-ui/react';
 import { Link } from 'react-router-dom';
 import Header from '../component/header';
+import '../UItest.css'; // CSSファイルをインポート
 
 const Home: React.FC = () => {
-    
+
     return (
-        <div>
+        <div className="backcolor">
             <Header />
-            <Text fontSize="2xl" color="blue.500">Welcome to the Yamada-UI</Text>
-            <Text fontSize="2xl" color="blue.500">This is a simple UI library for React</Text>
-            <Text fontSize="2xl" color="blue.500">You can use this library to create a simple web application</Text>
-            <Text fontSize="2xl" color="blue.500">Please click the button below to start</Text>
+            <Text fontSize="2xl" color="hi">BeLive</Text>
+            <Text fontSize="2xl" color="hi">ここ何書こうかな</Text>
+            <Text fontSize="2xl" color="hi"></Text>
+            <Text fontSize="2xl" color="hi">ここ</Text>
         </div>
     );
 };
