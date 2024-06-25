@@ -149,7 +149,7 @@ const MergedComponent: React.FC = () => {
         }
         const timer = setTimeout(() => {
             navigate('/'); // 指定時間後に/へリダイレクト
-        }, 60000);
+        }, timeout);
 
         const countdownInterval = setInterval(() => {
             setCountdown(prev => prev - 1);
