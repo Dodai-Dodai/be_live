@@ -8,7 +8,7 @@ import {
     Input
 } from '@yamada-ui/react';
 import { Icon as FontAwesomeIcon } from '@yamada-ui/fontawesome';
-import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import '../UItest.css'; // CSSファイルをインポート
 
 const generatePeerID = () => {
@@ -147,8 +147,8 @@ const Viewer: React.FC = () => {
             <Heading className="about-title">Viewer</Heading>
             {!isConnected && (
                 <div className="about-input-container">
-                    <FormControl label="peerIdInput" className="about-form-control">
-                        <Button onClick={handleConnect} colorScheme="blue" style={{ marginLeft: '10px' }}>Connect</Button>
+                    <FormControl className="about-form-control">
+                        <Button onClick={handleConnect} colorScheme="blue" style={{ marginLeft: '10px' }}>配信を見る</Button>
                     </FormControl>
                 </div>
             )}
@@ -166,18 +166,19 @@ const Viewer: React.FC = () => {
                 <div className="about-input-container">
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Textarea
-                            placeholder="comment"
-                            _placeholder={{ opacity: 1, color: "white" }}
+                            placeholder="コメントを入力"
+                            _placeholder={{ opacity: 0.5, color: "gray" }}
                             value={inputValue}
                             onChange={handleInputChange}
                             rows={1}
                             resize="none"
                             style={{ marginRight: '10px' }}
+                            width="500"
                         />
                         <Button
                             colorScheme="gray"
                             variant="outline"
-                            rightIcon={<FontAwesomeIcon icon={faAngleUp} />}
+                            rightIcon={<FontAwesomeIcon icon={faPaperPlane} style={{ color: "#ffffff", }} />}
                             onClick={handleButtonClick}
                         >
                         </Button>

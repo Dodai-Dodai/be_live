@@ -1,8 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Peer from "peerjs";
-import { Textarea, Button } from "@yamada-ui/react";
+import { Textarea, Button, Input,
+    InputGroup,
+    InputLeftAddon,
+    InputRightAddon,
+    InputLeftElement,
+    InputRightElement,} from "@yamada-ui/react";
 import { Icon as FontAwesomeIcon } from "@yamada-ui/fontawesome";
-import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { faAngleUp, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import '../UItest.css'; // CSSファイルをインポート
 
 const MergedComponent: React.FC = () => {
@@ -139,18 +144,19 @@ const MergedComponent: React.FC = () => {
             <div className="about-input-container">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Textarea
-                        placeholder="comment"
-                        _placeholder={{ opacity: 1, color: "white" }}
+                        placeholder="コメントを入力"
+                        _placeholder={{ opacity: 0.5, color: "gray" }}
                         value={inputValue}
                         onChange={handleInputChange}
                         rows={1}
                         resize="none"
                         style={{ marginRight: '10px' }}
+                        width="500"
                     />
                     <Button
                         colorScheme="gray"
                         variant="outline"
-                        rightIcon={<FontAwesomeIcon icon={faAngleUp} />}
+                        rightIcon={<FontAwesomeIcon icon={faPaperPlane} style={{color: "#ffffff",}} />}
                         onClick={handleButtonClick}
                     >
                     </Button>
