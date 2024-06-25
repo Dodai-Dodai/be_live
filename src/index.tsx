@@ -15,6 +15,7 @@ root.render(
 );
 
 // サービスワーカーを登録
+console.log('Registering service worker...'); // デバッグログ追加
 serviceWorkerRegistration.register();
 
 // If you want to start measuring performance in your app, pass a function
