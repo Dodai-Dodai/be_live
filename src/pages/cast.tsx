@@ -1,11 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import Peer from "peerjs";
-import { Textarea, Button, Input,
-    InputGroup,
-    InputLeftAddon,
-    InputRightAddon,
-    InputLeftElement,
-    InputRightElement,} from "@yamada-ui/react";
+import { useNavigate } from "react-router-dom";
+import {
+    Textarea,
+    Button,
+    Modal,
+    ModalOverlay,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+    Box,
+    Heading,
+    FormControl
+} from "@yamada-ui/react";
 import { Icon as FontAwesomeIcon } from "@yamada-ui/fontawesome";
 import { faAngleUp, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import '../UItest.css'; // CSSファイルをインポート
@@ -19,10 +28,24 @@ const MergedComponent: React.FC = () => {
     const [inputValue, setInputValue] = useState<string>('');
     const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
-    const messageTimeout = 3000;
-    const userID = localStorage.getItem('userID') || 'unknown_user';
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const timeout = 30000;
+    const userID = localStorage.getItem('userid') || 'unknown_user';
+    const navigate = useNavigate(); // For navigation
+    const [countdown, setCountdown] = useState<number>(timeout/1000); // Countdown state initialized to 60 seconds
 
     useEffect(() => {
+        const handlePermissionRequest = async () => {
+            try {
+                await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                onClose(); // パーミッションが付与されている場合、パーミッション・モーダルを閉じる
+            } catch (error) {
+                console.error("Permission denied for video/audio", error);
+            }
+        };
+
+        onOpen(); // 許可リクエストのモーダルを開く
+
         const peerInstance = new Peer('client', {
             host: 'be-live.ytakag.com',
             port: 443,
@@ -116,23 +139,33 @@ const MergedComponent: React.FC = () => {
                 updatedMessages.shift(); // 最も古いメッセージを削除
                 return updatedMessages;
             });
-        }, messageTimeout);
+        }, timeout);
         setDisplayTimeout(timeoutId);
     };
 
     useEffect(() => {
+        if (displayTimeout) {
+            clearTimeout(displayTimeout);
+        }
+        const timer = setTimeout(() => {
+            navigate('/'); // 指定時間後に/へリダイレクト
+        }, timeout);
+
+        const countdownInterval = setInterval(() => {
+            setCountdown(prev => prev - 1);
+        }, 1000);
+
         return () => {
-            if (displayTimeout) {
-                clearTimeout(displayTimeout);
-            }
+            clearTimeout(timer);
+            clearInterval(countdownInterval);
         };
-    }, [displayTimeout]);
+    }, [displayTimeout, navigate]);
 
     return (
         <div className="about-container">
-            <h1 className="about-title">Be Live Client</h1>
+            <Heading className="about-title">Be Live Client</Heading>
             <div className="about-video-container">
-                <video ref={localVideoRef} autoPlay muted className="about-video"></video>
+                <video ref={localVideoRef} autoPlay muted playsInline className="about-video"></video>
                 <div className="display-messages">
                     {displayMessages.map((message, index) => (
                         <div key={index} className="message">
@@ -143,6 +176,9 @@ const MergedComponent: React.FC = () => {
             </div>
             <div className="about-input-container">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Box fontSize="lg" marginRight="10px" color="gray">
+                        {countdown} 秒
+                    </Box>
                     <Textarea
                         placeholder="コメントを入力"
                         _placeholder={{ opacity: 0.5, color: "gray" }}
@@ -150,18 +186,36 @@ const MergedComponent: React.FC = () => {
                         onChange={handleInputChange}
                         rows={1}
                         resize="none"
-                        style={{ marginRight: '10px' }}
-                        width="500"
+                        style={{ marginRight: '10px', fontSize: '16px'}}
+                        width="auto"
                     />
                     <Button
                         colorScheme="gray"
                         variant="outline"
-                        rightIcon={<FontAwesomeIcon icon={faPaperPlane} style={{color: "#ffffff",}} />}
+                        rightIcon={<FontAwesomeIcon icon={faPaperPlane} style={{ color: "#ffffff" }} />}
                         onClick={handleButtonClick}
                     >
                     </Button>
                 </div>
             </div>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <Box>
+                    <ModalHeader>カメラとマイクの使用許可</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        このアプリはカメラとマイクの使用を求めています。許可しますか？
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button colorScheme="blue" mr={3} onClick={async () => {
+                            await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                            onClose();
+                        }}>
+                            許可
+                        </Button>
+                    </ModalFooter>
+                </Box>
+            </Modal>
         </div>
     );
 };
