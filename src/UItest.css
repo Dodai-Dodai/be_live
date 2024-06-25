@@ -20,6 +20,8 @@
     background-color: #1c1e21;
     /* 背景色を少し暗いグレーに設定 */
     position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .about-title {
