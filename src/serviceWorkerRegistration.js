@@ -19,6 +19,7 @@ const isLocalhost = Boolean(
 );
 
 export function register(config) {
+  console.log('Service worker registration start.'); // デバッグログ追加
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     console.log('Service worker is supported in this browser.'); // デバッグログ追加
     // The URL constructor is available in all browsers that support SW.
