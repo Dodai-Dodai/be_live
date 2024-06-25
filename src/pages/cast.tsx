@@ -12,6 +12,8 @@ import {
     ModalCloseButton,
     useDisclosure,
     Box,
+    Heading,
+    FormControl
 } from "@yamada-ui/react";
 import { Icon as FontAwesomeIcon } from "@yamada-ui/fontawesome";
 import { faAngleUp, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
@@ -27,9 +29,10 @@ const MergedComponent: React.FC = () => {
     const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const messageTimeout = 3000;
+    const timeout = 3000;
     const userID = localStorage.getItem('userID') || 'unknown_user';
     const navigate = useNavigate(); // For navigation
+    const [countdown, setCountdown] = useState<number>(60); // Countdown state initialized to 60 seconds
 
     useEffect(() => {
         const handlePermissionRequest = async () => {
@@ -136,7 +139,7 @@ const MergedComponent: React.FC = () => {
                 updatedMessages.shift(); // 最も古いメッセージを削除
                 return updatedMessages;
             });
-        }, messageTimeout);
+        }, timeout);
         setDisplayTimeout(timeoutId);
     };
 
@@ -146,16 +149,21 @@ const MergedComponent: React.FC = () => {
         }
         const timer = setTimeout(() => {
             navigate('/'); // 指定時間後に/へリダイレクト
-        }, 30000);
+        }, 60000);
+
+        const countdownInterval = setInterval(() => {
+            setCountdown(prev => prev - 1);
+        }, 1000);
 
         return () => {
             clearTimeout(timer);
+            clearInterval(countdownInterval);
         };
     }, [displayTimeout, navigate]);
 
     return (
         <div className="about-container">
-            <h1 className="about-title">Be Live Client</h1>
+            <Heading className="about-title">Be Live Client</Heading>
             <div className="about-video-container">
                 <video ref={localVideoRef} autoPlay muted playsInline className="about-video"></video>
                 <div className="display-messages">
@@ -168,6 +176,9 @@ const MergedComponent: React.FC = () => {
             </div>
             <div className="about-input-container">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Box fontSize="lg" marginRight="10px" color="gray">
+                        {countdown} 秒
+                    </Box>
                     <Textarea
                         placeholder="コメントを入力"
                         _placeholder={{ opacity: 0.5, color: "gray" }}
