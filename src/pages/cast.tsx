@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Peer from "peerjs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
     Textarea,
     Button,
@@ -33,6 +33,9 @@ const MergedComponent: React.FC = () => {
     const userID = localStorage.getItem('userid') || 'unknown_user';
     const navigate = useNavigate(); // For navigation
     const [countdown, setCountdown] = useState<number>(timeout / 1000); // Countdown state initialized to 60 seconds
+    const location = useLocation();
+    const state = location.state as { peerid?: string };
+    const peerid = state?.peerid || '';
 
     useEffect(() => {
         const handlePermissionRequest = async () => {
@@ -46,7 +49,7 @@ const MergedComponent: React.FC = () => {
 
         onOpen(); // 許可リクエストのモーダルを開く
 
-        const peerInstance = new Peer('client', {
+        const peerInstance = new Peer(peerid, {
             host: 'be-live.ytakag.com',
             port: 443,
             path: '/peerjs',

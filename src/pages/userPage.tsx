@@ -21,18 +21,19 @@ const UserPage: React.FC = () => {
                 },
                 body: JSON.stringify({ userid: userID })
             });
-            const data = await response.json();
+            const data = await response.json(); // -> { userid: 'xxxx', peerid: 'yyyy' }
             console.log(data);
             if (data == '404') {
                 console.log('リクエストが404です。5秒後に再試行します。');
             } else {
-                stopMatching();
+                // stopMatching();
+                const peerid = data.peerid;
                 if (data.userid === userID) {
                     console.log('host');
-                    navigate('/client0');
+                    navigate('/client0', { state: { peerid } });
                 } else {
                     console.log('viewer');
-                    navigate('/viewer');
+                    navigate('/viewer', { state: { peerid } });
                 }
             }
         } catch (error) {
