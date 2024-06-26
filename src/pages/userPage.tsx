@@ -14,7 +14,13 @@ const UserPage: React.FC = () => {
     const handleNavigate = async () => {
         const url = 'https://be-live.ytakag.com/api/randomuser';
         try {
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userid: userID })
+            });
             if (response.status !== 404) {
                 const data = await response.json();
                 console.log(data);
@@ -47,7 +53,7 @@ const UserPage: React.FC = () => {
     return (
         <div>
             <Header />
-            <Text fontSize="2xl" color="blue.500">Your userID is {userid}</Text>
+            <Text fontSize="2xl" color="blue.500">Your userID is {userID}</Text>
 
             <Link to="/test">
                 <Button colorScheme="blue">Go to Test Page</Button>
