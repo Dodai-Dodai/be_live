@@ -197,7 +197,7 @@ const MergedComponent: React.FC = () => {
                     </Button>
                 </div>
             </div>
-            <Modal isOpen={isOpen} onClose={onClose}>
+            {/*<Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <Box>
                     <ModalHeader>カメラとマイクの使用許可</ModalHeader>
@@ -214,7 +214,7 @@ const MergedComponent: React.FC = () => {
                         </Button>
                     </ModalFooter>
                 </Box>
-            </Modal>
+            </Modal>*/}
         </div>
     );
 };
