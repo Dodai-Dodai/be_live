@@ -6,6 +6,7 @@ import {
     Heading,
     FormControl,
     Box,
+    useLoading,
 } from '@yamada-ui/react';
 import { Icon as FontAwesomeIcon } from '@yamada-ui/fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
@@ -40,6 +41,8 @@ const Viewer: React.FC = () => {
     const location = useLocation();
     const state = location.state as { peerid?: string };
     const peerid = state?.peerid || '';
+    const { screen, page, background } = useLoading()
+
 
     const handleConnect = () => {
         const newPeerId = generatePeerID();
@@ -174,6 +177,25 @@ const Viewer: React.FC = () => {
         };
     }, []);
 
+    //ページが読み込まれるときにローディング画面を表示する
+
+    const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+    const onLoadingPage = async () => {
+        try {
+            page.start()
+
+            await wait(5000)
+        } finally {
+            page.finish()
+        }
+    }
+
+    useEffect(() => {
+        onLoadingPage();
+    }, []);
+
+
     return (
         <div className="about-container">
             <Heading className="about-title">Viewer</Heading>
@@ -224,3 +246,7 @@ const Viewer: React.FC = () => {
 };
 
 export default Viewer;
+function wait(arg0: number) {
+    throw new Error('Function not implemented.');
+}
+
