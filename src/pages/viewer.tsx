@@ -10,6 +10,7 @@ import {
 import { Icon as FontAwesomeIcon } from '@yamada-ui/fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import '../UItest.css'; // CSSファイルをインポート
+import { useLocation } from 'react-router-dom';
 
 const generatePeerID = () => {
     const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -35,8 +36,10 @@ const Viewer: React.FC = () => {
     const [isConnected, setIsConnected] = useState<boolean>(false);
     const timeout = 30000;
     const [countdown, setCountdown] = useState<number>(timeout / 1000);
-
     const userID = localStorage.getItem('userid') || 'unknown_user';
+    const location = useLocation();
+    const state = location.state as { peerid?: string };
+    const peerid = state?.peerid || '';
 
     const handleConnect = () => {
         const newPeerId = generatePeerID();
@@ -51,7 +54,7 @@ const Viewer: React.FC = () => {
         peerRef.current = peerInstance;
 
         peerInstance.on('open', () => {
-            const conn = peerInstance.connect('client');
+            const conn = peerInstance.connect(peerid);
             setConn(conn);
             conn.on('open', () => {
                 conn.send(JSON.stringify({ type: 'connect_request', peerId: newPeerId }));
