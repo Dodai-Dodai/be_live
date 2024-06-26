@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Button, Heading, FormControl, Label, HelperMessage, ErrorMessage, Input, VStack, Center, Grid, GridItem } from '@yamada-ui/react';
+import { Button, Heading, FormControl, Label, HelperMessage, ErrorMessage, Input, VStack, Center, Grid, GridItem, useNotice } from '@yamada-ui/react';
 import animals from '../animal.json';
 import Header from '../component/header';
 
 const Login: React.FC = () => {
     const [animalName, setAnimalName] = useState<string>('');
     const navigate = useNavigate();
+    const notice = useNotice()
+
 
     const handleRandomAnimal = () => {
         const animalList = animals['2'];
@@ -31,7 +33,7 @@ const Login: React.FC = () => {
         //    body: JSON.stringify(data),
         //});
         //if (response.ok) {
-            navigate('/home', { state: { randomAnimal } });
+        navigate('/home', { state: { randomAnimal } });
         //} else {
         //    alert('Failed to login');
         //}
@@ -43,16 +45,18 @@ const Login: React.FC = () => {
             <Center h="100vh" p={4}>
                 <VStack maxW="400px" w="100%">
                     <Heading size="lg" mb={6}>Login</Heading>
-                    <FormControl id="email">
+                    <FormControl id="email" isDisabled>
                         <Label>Email</Label>
                         <Input type="email" />
                     </FormControl>
-                    <FormControl id="password">
+                    <FormControl id="password" isDisabled>
                         <Label>Password</Label>
                         <Input type="password" />
                     </FormControl>
-                    <Button colorScheme="blue" w="100%">Login</Button>
-                    
+                    <Button colorScheme="blue" w="100%" onClick={() =>
+                        notice({ description: "まだないです〜", isClosable: true, })
+                    }>Login</Button>
+
                     <Button colorScheme="gray" w="100%" onClick={handleNavigate}>Guest Login</Button>
                 </VStack>
             </Center>
