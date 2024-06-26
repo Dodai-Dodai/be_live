@@ -32,7 +32,7 @@ const MergedComponent: React.FC = () => {
     const timeout = 30000;
     const userID = localStorage.getItem('userid') || 'unknown_user';
     const navigate = useNavigate(); // For navigation
-    const [countdown, setCountdown] = useState<number>(timeout/1000); // Countdown state initialized to 60 seconds
+    const [countdown, setCountdown] = useState<number>(timeout / 1000); // Countdown state initialized to 60 seconds
 
     useEffect(() => {
         const handlePermissionRequest = async () => {
@@ -139,7 +139,8 @@ const MergedComponent: React.FC = () => {
                 updatedMessages.shift(); // 最も古いメッセージを削除
                 return updatedMessages;
             });
-        }, );
+        }, timeout);
+        setDisplayTimeout(timeoutId);
     };
 
     useEffect(() => {
@@ -148,7 +149,7 @@ const MergedComponent: React.FC = () => {
         }
         const timer = setTimeout(() => {
             navigate('/'); // 指定時間後に/へリダイレクト
-        }, countdown*1000);
+        }, countdown * 1000);
 
         const countdownInterval = setInterval(() => {
             setCountdown(prev => prev - 1);
@@ -185,7 +186,7 @@ const MergedComponent: React.FC = () => {
                         onChange={handleInputChange}
                         rows={1}
                         resize="none"
-                        style={{ marginRight: '10px', fontSize: '16px'}}
+                        style={{ marginRight: '10px', fontSize: '16px' }}
                         width="auto"
                     />
                     <Button
