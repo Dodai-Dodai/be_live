@@ -23,18 +23,18 @@ const Login: React.FC = () => {
         // animalNameを/adduserに対してpostする
         const url = 'https://be-live.ytakag.com/api/adduser';
         const data = { userid: randomAnimal };
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        if (response.ok) {
+        //const response = await fetch(url, {
+        //    method: 'POST',
+        //    headers: {
+        //        'Content-Type': 'application/json',
+        //    },
+        //    body: JSON.stringify(data),
+        //});
+        //if (response.ok) {
             navigate('/home', { state: { randomAnimal } });
-        } else {
-            alert('Failed to login');
-        }
+        //} else {
+        //    alert('Failed to login');
+        //}
     };
 
     return (

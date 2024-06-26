@@ -21,13 +21,11 @@ const UserPage: React.FC = () => {
                 },
                 body: JSON.stringify({ userid: userID })
             });
-            if (response.status !== 404) {
-                const data = await response.json();
-                console.log(data);
-                if (intervalRef.current) {
-                    clearInterval(intervalRef.current);
-                }
-
+            const data = await response.json();
+            console.log(data);
+            if (data == '404') {
+                console.log('リクエストが404です。5秒後に再試行します。');
+            } else {
                 if (data.userid === userID) {
                     console.log('host');
                     navigate('/client0');
