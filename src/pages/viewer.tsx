@@ -154,24 +154,22 @@ const Viewer: React.FC = () => {
         };
     }, []);
 
-    // カウントダウンロジックを追加
+    // カウントダウンロジックを追加（ページアクセス時に開始）
     useEffect(() => {
-        if (isConnected) {
-            const intervalId = setInterval(() => {
-                setCountdown(prevCountdown => {
-                    if (prevCountdown > 0) {
-                        return prevCountdown - 1;
-                    } else {
-                        clearInterval(intervalId);
-                        return 0;
-                    }
-                });
-            }, 1000);
-            return () => {
-                clearInterval(intervalId);
-            };
-        }
-    }, [isConnected]);
+        const intervalId = setInterval(() => {
+            setCountdown(prevCountdown => {
+                if (prevCountdown > 0) {
+                    return prevCountdown - 1;
+                } else {
+                    clearInterval(intervalId);
+                    return 0;
+                }
+            });
+        }, 1000);
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
 
     return (
         <div className="about-container">

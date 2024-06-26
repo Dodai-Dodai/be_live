@@ -1,16 +1,70 @@
-import React from 'react';
-import { Box, Text, Button } from '@yamada-ui/react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Box, Text, Button, Loading } from '@yamada-ui/react';
 import Header from '../component/header';
 
 const UserPage: React.FC = () => {
-    // localstrageに保存されているuserIDを取得
-    const userid = localStorage.getItem('userID');
+    // localStorageに保存されているuserIDを取得
+    const userID = localStorage.getItem('userid');
+    const [isMatching, setIsMatching] = useState(false);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const navigate = useNavigate();
+
+    // ランダムマッチング用
+    const handleNavigate = async () => {
+        const url = 'https://be-live.ytakag.com/api/randomuser';
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userid: userID })
+            });
+            const data = await response.json();
+            console.log(data);
+            if (data == '404') {
+                console.log('リクエストが404です。5秒後に再試行します。');
+            } else {
+                stopMatching();
+                if (data.userid === userID) {
+                    console.log('host');
+                    navigate('/client0');
+                } else {
+                    console.log('viewer');
+                    navigate('/viewer');
+                }
+            }
+        } catch (error) {
+            console.error('リクエストエラー:', error);
+        }
+    };
+
+    const startMatching = () => {
+        if (!isMatching) {
+            setIsMatching(true);
+            intervalRef.current = setInterval(handleNavigate, 5000);
+        }
+    };
+
+    const stopMatching = () => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+        setIsMatching(false);
+    };
+
+    useEffect(() => {
+        return () => {
+            stopMatching(); // コンポーネントがアンマウントされる時にマッチングを停止
+        };
+    }, []);
 
     return (
         <div>
             <Header />
-            <Text fontSize="2xl" color="blue.500">Your userID is {userid}</Text>
+            <Text fontSize="2xl" color="blue.500">Your userID is {userID}</Text>
 
             <Link to="/test">
                 <Button colorScheme="blue">Go to Test Page</Button>
@@ -31,6 +85,13 @@ const UserPage: React.FC = () => {
             <Link to="/guest">
                 <Button colorScheme="blue">Go to guest Page</Button>
             </Link>
+
+            <Button colorScheme="primary" w="100%" onClick={startMatching} disabled={isMatching}>
+                {isMatching ? 'マッチング中...' : 'Be-Liveに飛び込む！'}
+            </Button>
+            {isMatching && (
+                <Button colorScheme="red" w="100%" onClick={stopMatching}>マッチングを中止</Button>
+            )}
         </div>
     );
 };

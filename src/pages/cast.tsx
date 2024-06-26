@@ -139,8 +139,7 @@ const MergedComponent: React.FC = () => {
                 updatedMessages.shift(); // 最も古いメッセージを削除
                 return updatedMessages;
             });
-        }, timeout);
-        setDisplayTimeout(timeoutId);
+        }, );
     };
 
     useEffect(() => {
@@ -149,7 +148,7 @@ const MergedComponent: React.FC = () => {
         }
         const timer = setTimeout(() => {
             navigate('/'); // 指定時間後に/へリダイレクト
-        }, timeout);
+        }, countdown*1000);
 
         const countdownInterval = setInterval(() => {
             setCountdown(prev => prev - 1);

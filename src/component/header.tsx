@@ -7,6 +7,20 @@ const Header: React.FC = () => {
     const userID = localStorage.getItem('userid');
     // 画面上部に表示する // userIDがあればそれも一緒に表示
 
+    const handleNavigate = async () => {
+        const randomAnimal = localStorage.getItem('userid');
+        // animalNameを/adduserに対してpostする
+        const url = 'https://be-live.ytakag.com/api/deleteuser';
+        const data = { userid: randomAnimal };
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+    };
+
     return (
         <Box
             display="flex"
@@ -24,7 +38,7 @@ const Header: React.FC = () => {
 
             <Box>
                 {userID && <Text marginRight="10px" color="primary">{userID} さん</Text>}
-                <Button variant="outline" colorScheme="test">
+                <Button variant="outline" colorScheme="test" onClick={handleNavigate}>
                     <Link to="/login">
                         ログイン
                     </Link>
