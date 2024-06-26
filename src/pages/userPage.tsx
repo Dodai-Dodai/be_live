@@ -64,7 +64,7 @@ const UserPage: React.FC = () => {
     return (
         <div>
             <Header />
-            <Text fontSize="2xl" color="blue.500">Your userID is {userID}</Text>
+            {/* <Text fontSize="2xl" color="blue.500">Your userID is {userID}</Text>
 
             <Link to="/test">
                 <Button colorScheme="blue">Go to Test Page</Button>
@@ -84,7 +84,7 @@ const UserPage: React.FC = () => {
 
             <Link to="/guest">
                 <Button colorScheme="blue">Go to guest Page</Button>
-            </Link>
+            </Link> */}
 
             <Button colorScheme="primary" w="100%" onClick={startMatching} disabled={isMatching}>
                 {isMatching ? 'マッチング中...' : 'Be-Liveに飛び込む！'}
