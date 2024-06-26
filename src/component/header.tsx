@@ -1,10 +1,12 @@
-import React from "react";
-import { Box, Text, Button } from "@yamada-ui/react";
+import React, { useRef } from "react";
+import { Box, Text, Button, useNotice } from "@yamada-ui/react";
 import { Link } from "react-router-dom";
 
 const Header: React.FC = () => {
     // もしlocalStorageにuserIDが保存されていれば取得
     const userID = localStorage.getItem('userid');
+    const notice = useNotice()
+
     // 画面上部に表示する // userIDがあればそれも一緒に表示
 
     const handleNavigate = async () => {
@@ -44,10 +46,12 @@ const Header: React.FC = () => {
                     </Link>
                 </Button>
 
-                <Button variant="outline" colorScheme="test">
-                    <Link to="/signup">
-                        新規登録
-                    </Link>
+                <Button variant="outline" colorScheme="test" onClick={() =>
+                    notice({ description: "まだないです〜", isClosable: true, })
+                }>
+                    {/* <Link to="/signup"> */}
+                    新規登録
+                    {/* </Link> */}
                 </Button>
 
             </Box >
