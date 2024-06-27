@@ -211,7 +211,7 @@ const Viewer: React.FC = () => {
                 <Box flex="1" w="100%" h="75%" display="flex" justifyContent="center" alignItems="center">
                     <video ref={remoteVideoRef} autoPlay playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }}></video>
                 </Box>
-                <Box position="absolute" bottom="10px" left="10px" zIndex="1">
+                <Box position="absolute" bottom="100px" left="10px" zIndex="1">
                     {displayMessages.map((message, index) => (
                         <Box key={index} bg="rgba(255, 255, 255, 0.8)" p="2" borderRadius="md" mb="2" color="black">
                             <Text fontWeight="bold">{message.user}:</Text> {message.text}
