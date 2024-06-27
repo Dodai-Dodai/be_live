@@ -204,9 +204,9 @@ const Viewer: React.FC = () => {
         <Flex direction="column" align="center" bg="#1c1e21" minH="100vH" p="4" color="white">
             <Heading mb="6">Viewer</Heading>
             {!isConnected && (
-                <FormControl mb="4">
+                <Flex justify="center" align="center" w="100%">
                     <Button onClick={handleConnect} colorScheme="blue" style={{ marginLeft: '10px' }}>配信を見る</Button>
-                </FormControl>
+                </Flex>
             )}
             <VStack flex="1" w="100%">
                 <Box flex="1" w="100%" display="flex" justifyContent="center" alignItems="center">
