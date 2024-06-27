@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { Box, Text, Button, useNotice } from "@yamada-ui/react";
 import { Link } from "react-router-dom";
+import logo from '../logo.svg'; // 画像ファイルをインポート
 
 const Header: React.FC = () => {
     // もしlocalStorageにuserIDが保存されていれば取得
@@ -32,11 +33,10 @@ const Header: React.FC = () => {
             borderBottom="1px solid #ddd"
             backgroundColor="gray.900" // 背景色をグレーに設定
         >
-            <Button variant="outline" colorScheme="test" size="lg">
-                <Link to="/">
-                    be_live
-                </Link>
-            </Button>
+            <Link to="/">
+                <img src={logo} alt="be_live logo" style={{ height: '40px' }} />
+
+            </Link>
 
             <Box>
                 {userID && <Text marginRight="10px" color="primary">{userID} さん</Text>}
@@ -53,9 +53,8 @@ const Header: React.FC = () => {
                     新規登録
                     {/* </Link> */}
                 </Button>
-
-            </Box >
-        </Box >
+            </Box>
+        </Box>
     );
 };
 
