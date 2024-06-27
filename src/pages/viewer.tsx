@@ -213,7 +213,7 @@ const Viewer: React.FC = () => {
                 </Box>
                 <Box position="absolute" bottom="10px" left="10px" zIndex="1">
                     {displayMessages.map((message, index) => (
-                        <Box key={index} bg="rgba(255, 255, 255, 0.8)" p="2" borderRadius="md" mb="2">
+                        <Box key={index} bg="rgba(255, 255, 255, 0.8)" p="2" borderRadius="md" mb="2" color="black">
                             <Text fontWeight="bold">{message.user}:</Text> {message.text}
                         </Box>
                     ))}
@@ -235,7 +235,7 @@ const Viewer: React.FC = () => {
                         flex="1"
                     />
                     <Button
-                        colorScheme="gray"
+                        colorScheme="whiteAlpha"
                         variant="outline"
                         rightIcon={<FontAwesomeIcon icon={faPaperPlane} />}
                         onClick={handleButtonClick}
