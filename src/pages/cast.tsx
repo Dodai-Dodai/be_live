@@ -151,6 +151,9 @@ const MergedComponent: React.FC = () => {
             clearTimeout(displayTimeout);
         }
         const timer = setTimeout(() => {
+            // カメラが使用されている場合、ストリームを停止
+            const stream = localVideoRef.current?.srcObject as MediaStream;
+            stream.getTracks().forEach(track => track.stop());
             navigate('/'); // 指定時間後に/へリダイレクト
         }, countdown * 1000);
 
