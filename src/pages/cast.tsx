@@ -151,6 +151,10 @@ const MergedComponent: React.FC = () => {
             clearTimeout(displayTimeout);
         }
         const timer = setTimeout(() => {
+            // peerjsの接続を切断
+            if (peerRef.current) {
+                peerRef.current.destroy();
+            }
             navigate('/'); // 指定時間後に/へリダイレクト
         }, countdown * 1000);
 
