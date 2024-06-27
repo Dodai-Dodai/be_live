@@ -208,7 +208,7 @@ const Viewer: React.FC = () => {
                 </Flex>
             )}
             <VStack flex="1" w="100%">
-                <Box flex="1" w="100%" display="flex" justifyContent="center" alignItems="center">
+                <Box flex="1" w="100%" h="75%" display="flex" justifyContent="center" alignItems="center">
                     <video ref={remoteVideoRef} autoPlay playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }}></video>
                 </Box>
                 <Box position="absolute" bottom="10px" left="10px" zIndex="1">
