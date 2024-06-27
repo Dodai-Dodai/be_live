@@ -7,6 +7,10 @@ import {
     FormControl,
     Box,
     useLoading,
+    Flex,
+    VStack,
+    HStack,
+    Text,
 } from '@yamada-ui/react';
 import { Icon as FontAwesomeIcon } from '@yamada-ui/fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
@@ -197,51 +201,49 @@ const Viewer: React.FC = () => {
 
 
     return (
-        <div className="about-container">
-            <Heading className="about-title">Viewer</Heading>
+        <Flex direction="column" align="center" bg="#1c1e21" minH="100vH" p="4" color="white">
+            <Heading mb="6">Viewer</Heading>
             {!isConnected && (
-                <div className="about-input-container">
-                    <FormControl className="about-form-control">
-                        <Button onClick={handleConnect} colorScheme="blue" style={{ marginLeft: '10px' }}>配信を見る</Button>
-                    </FormControl>
-                </div>
+                <FormControl mb="4">
+                    <Button onClick={handleConnect} colorScheme="blue" style={{ marginLeft: '10px' }}>配信を見る</Button>
+                </FormControl>
             )}
-            <div className="about-video-container">
-                <video ref={remoteVideoRef} autoPlay playsInline className="about-video"></video>
-                <div className="display-messages">
+            <VStack flex="1" w="100%">
+                <Box flex="1" w="100%" display="flex" justifyContent="center" alignItems="center">
+                    <video ref={remoteVideoRef} autoPlay playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }}></video>
+                </Box>
+                <Box position="absolute" bottom="10px" left="10px" zIndex="1">
                     {displayMessages.map((message, index) => (
-                        <div key={index} className="message">
-                            <strong>{message.user}:</strong> {message.text}
-                        </div>
-                    ))}
-                </div>
-            </div>
-            {isConnected && (
-                <div className="about-input-container">
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Box fontSize="lg" marginRight="10px" color="gray">
-                            {countdown} 秒
+                        <Box key={index} bg="rgba(255, 255, 255, 0.8)" p="2" borderRadius="md" mb="2">
+                            <Text fontWeight="bold">{message.user}:</Text> {message.text}
                         </Box>
-                        <Textarea
-                            placeholder="コメントを入力"
-                            _placeholder={{ opacity: 0.5, color: "gray" }}
-                            value={inputValue}
-                            onChange={handleInputChange}
-                            rows={1}
-                            resize="none"
-                            style={{ marginRight: '10px', fontSize: '16px', width: '80%' }}
-                        />
-                        <Button
-                            colorScheme="gray"
-                            variant="outline"
-                            rightIcon={<FontAwesomeIcon icon={faPaperPlane} style={{ color: "#ffffff", }} />}
-                            onClick={handleButtonClick}
-                        >
-                        </Button>
-                    </div>
-                </div>
+                    ))}
+                </Box>
+            </VStack>
+            {isConnected && (
+                <HStack mt="4" w="100%" px="4">
+                    <Box fontSize="lg" color="gray.400">
+                        {countdown} 秒
+                    </Box>
+                    <Textarea
+                        placeholder="コメントを入力"
+                        _placeholder={{ opacity: 0.5, color: "gray" }}
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        rows={1}
+                        resize="none"
+                        fontSize="16px"
+                        flex="1"
+                    />
+                    <Button
+                        colorScheme="gray"
+                        variant="outline"
+                        rightIcon={<FontAwesomeIcon icon={faPaperPlane} />}
+                        onClick={handleButtonClick}
+                    />
+                </HStack>
             )}
-        </div>
+        </Flex>
     );
 };
 
