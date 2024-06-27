@@ -14,7 +14,6 @@ import {
 } from '@yamada-ui/react';
 import { Icon as FontAwesomeIcon } from '@yamada-ui/fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import '../UItest.css'; // CSSファイルをインポート
 import { useLocation } from 'react-router-dom';
 
 const generatePeerID = () => {
