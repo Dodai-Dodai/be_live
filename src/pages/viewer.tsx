@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Peer from 'peerjs';
 import {
     Textarea,
@@ -45,6 +45,23 @@ const Viewer: React.FC = () => {
     const state = location.state as { peerid?: string };
     const peerid = state?.peerid || '';
     const { screen, page, background } = useLoading()
+
+    const blockBrowserBack = useCallback(() => {
+        window.history.go(1)
+    }, [])
+
+    useEffect(() => {
+        // 直前の履歴に現在のページを追加
+        window.history.pushState(null, '', window.location.href)
+
+        // 直前の履歴と現在のページのループ
+        window.addEventListener('popstate', blockBrowserBack)
+
+        // クリーンアップは忘れない
+        return () => {
+            window.removeEventListener('popstate', blockBrowserBack)
+        }
+    }, [blockBrowserBack])
 
 
     const handleConnect = () => {
