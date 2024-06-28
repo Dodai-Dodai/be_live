@@ -152,8 +152,14 @@ const MergedComponent: React.FC = () => {
         }
         const timer = setTimeout(() => {
             // カメラが使用されている場合、ストリームを停止
-            const stream = localVideoRef.current?.srcObject as MediaStream;
-            stream.getTracks().forEach(track => track.stop());
+            if (localVideoRef.current && localVideoRef.current.srcObject) {
+                const stream = localVideoRef.current.srcObject as MediaStream;
+                if (stream instanceof MediaStream) { // 実行時にMediaStreamであることを確認
+                  stream.getTracks().forEach(track => {
+                    track.stop(); // トラックを停止
+                  });
+                }
+              }
             navigate('/'); // 指定時間後に/へリダイレクト
         }, countdown * 1000);
 
@@ -170,6 +176,7 @@ const MergedComponent: React.FC = () => {
     return (
         <div className="about-container">
             <Heading className="about-title">Be Live Client</Heading>
+            <p>Peer ID: {peerid}</p>
             <div className="about-video-container">
                 <video ref={localVideoRef} autoPlay muted playsInline className="about-video"></video>
                 <div className="display-messages">

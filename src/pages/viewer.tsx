@@ -202,6 +202,7 @@ const Viewer: React.FC = () => {
     return (
         <Flex direction="column" align="center" bg="#1c1e21" minH="100vH" p="4" color="white">
             <Heading mb="6">Viewer</Heading>
+            <p>Peer ID: {peerid}</p>
             {!isConnected && (
                 <Flex justify="center" align="center" w="100%">
                     <Button onClick={handleConnect} colorScheme="blue" size="lg" style={{ marginLeft: '10px', width: '300px', height: '90px', fontSize: '50px' }}>配信を見る</Button>
