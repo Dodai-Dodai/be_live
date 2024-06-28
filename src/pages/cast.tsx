@@ -29,7 +29,7 @@ const MergedComponent: React.FC = () => {
     const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const timeout = 30000;
+    const timeout = 60000;
     const userID = localStorage.getItem('userid') || 'unknown_user';
     const navigate = useNavigate(); // For navigation
     const [countdown, setCountdown] = useState<number>(timeout / 1000); // Countdown state initialized to 60 seconds

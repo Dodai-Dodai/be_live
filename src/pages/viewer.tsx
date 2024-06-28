@@ -38,7 +38,7 @@ const Viewer: React.FC = () => {
     const [displayMessages, setDisplayMessages] = useState<{ user: string, text: string }[]>([]);
     const [displayTimeout, setDisplayTimeout] = useState<NodeJS.Timeout | null>(null);
     const [isConnected, setIsConnected] = useState<boolean>(false);
-    const timeout = 30000;
+    const timeout = 60000;
     const [countdown, setCountdown] = useState<number>(timeout / 1000);
     const userID = localStorage.getItem('userid') || 'unknown_user';
     const location = useLocation();
@@ -204,7 +204,7 @@ const Viewer: React.FC = () => {
             <Heading mb="6">Viewer</Heading>
             {!isConnected && (
                 <Flex justify="center" align="center" w="100%">
-                    <Button onClick={handleConnect} colorScheme="blue" style={{ marginLeft: '10px' }}>配信を見る</Button>
+                    <Button onClick={handleConnect} colorScheme="blue" size="lg" style={{ marginLeft: '10px', width: '300px', height: '90px', fontSize: '50px' }}>配信を見る</Button>
                 </Flex>
             )}
             <VStack flex="1" w="100%">
