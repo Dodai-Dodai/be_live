@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Box, Text, Button, Heading, VStack, HStack, List, ListItem, Spacer, Icon } from '@yamada-ui/react';
 import Header from '../component/header';
 import { Link } from 'react-router-dom';
 import { MdFlashOn, MdLiveTv, MdPeople, MdStar } from 'react-icons/md';
 
 const Home: React.FC = () => {
+
+    const blockBrowserBack = useCallback(() => {
+        window.history.go(1)
+    }, [])
+
+    useEffect(() => {
+        // 直前の履歴に現在のページを追加
+        window.history.pushState(null, '', window.location.href)
+
+        // 直前の履歴と現在のページのループ
+        window.addEventListener('popstate', blockBrowserBack)
+
+        // クリーンアップは忘れない
+        return () => {
+            window.removeEventListener('popstate', blockBrowserBack)
+        }
+    }, [blockBrowserBack])
     return (
         <>
             <Header />
             <Box bg="gray.800" minH="100vh" p={8}>
                 <VStack>
-                    <Heading 
-                        bgGradient="linear(to-r, #59a9e1, #f37bdf)" 
-                        bgClip="text" 
+                    <Heading
+                        bgGradient="linear(to-r, #59a9e1, #f37bdf)"
+                        bgClip="text"
                         fontSize={{ base: "3xl", md: "5xl" }}
                         textAlign="center"
                         mb={8}

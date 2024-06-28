@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Box, Text, Button, Loading } from '@yamada-ui/react';
 import Header from '../component/header';
@@ -9,6 +9,23 @@ const UserPage: React.FC = () => {
     const [isMatching, setIsMatching] = useState(false);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const navigate = useNavigate();
+
+    const blockBrowserBack = useCallback(() => {
+        window.history.go(1)
+    }, [])
+
+    useEffect(() => {
+        // 直前の履歴に現在のページを追加
+        window.history.pushState(null, '', window.location.href)
+
+        // 直前の履歴と現在のページのループ
+        window.addEventListener('popstate', blockBrowserBack)
+
+        // クリーンアップは忘れない
+        return () => {
+            window.removeEventListener('popstate', blockBrowserBack)
+        }
+    }, [blockBrowserBack])
 
     // ランダムマッチング用
     const handleNavigate = async () => {
